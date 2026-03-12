@@ -1,5 +1,5 @@
 use crate::core::window;
-use crate::renderer::renderer;
+use crate::render::renderer;
 use gl;
 
 pub struct OpenGL {}

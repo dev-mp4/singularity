@@ -27,6 +27,7 @@ impl Window {
         })
     }
 
+
     pub fn get_proc_address(&mut self, name: &str) -> Result<*const c_void, ()> {
         self.window.get_proc_address(name).map(|p| p as *const c_void).ok_or(())
     }
