@@ -25,10 +25,12 @@ impl mesh::Mesh for Mesh {
             gl::BindBuffer(gl::ARRAY_BUFFER, mesh.vbo);
             gl::BufferData(gl::ARRAY_BUFFER, (vertices.len() * size_of::<f32>()) as gl::types::GLsizeiptr, vertices.as_ptr() as *const gl::types::GLvoid, gl::STATIC_DRAW);
 
+            let total_stride = attributes.iter().sum::<u8>() as u32;
+
             let mut stride: u32 = 0;
             let mut index: u32 = 0;
             attributes.iter().for_each(|&x| {
-                gl::VertexAttribPointer(index, x as gl::types::GLint, gl::FLOAT, gl::FALSE, stride as gl::types::GLsizei, (stride * size_of::<f32>() as u32) as *const gl::types::GLvoid);
+                gl::VertexAttribPointer(index, x as gl::types::GLint, gl::FLOAT, gl::FALSE, (total_stride * size_of::<f32>() as u32) as i32, (stride * size_of::<f32>() as u32) as *const gl::types::GLvoid);
                 gl::EnableVertexAttribArray(index);
                 stride += x as u32;
                 index += 1;
