@@ -40,4 +40,8 @@ impl Window {
         self.glfw.poll_events();
         self.window.swap_buffers();
     }
+    
+    pub fn get_time(&self) -> f64 {
+        self.glfw.get_time()
+    }
 }

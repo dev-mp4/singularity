@@ -21,6 +21,13 @@ impl renderer::Renderer for OpenGL {
         if failed {
             Err(())
         } else {
+            unsafe {
+                gl::Enable(gl::BLEND);
+                gl::BlendFunc(gl::SRC_ALPHA, gl::ONE_MINUS_SRC_ALPHA);
+
+                gl::Enable(gl::DEPTH_TEST);
+            }
+
             Ok(())
         }
     }
@@ -28,7 +35,7 @@ impl renderer::Renderer for OpenGL {
     fn clear(r: u8, g: u8, b: u8) {
         unsafe {
             gl::ClearColor(r as f32, g as f32, b as f32, 255.0);
-            gl::Clear(gl::COLOR_BUFFER_BIT);
+            gl::Clear(gl::COLOR_BUFFER_BIT | gl::DEPTH_BUFFER_BIT);
         }
     }
 }

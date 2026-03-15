@@ -1,25 +1,20 @@
-use png::Decoder;
+use spng::{Decoder, Format};
 use crate::types::image::Image;
-use std::io::BufReader;
-use std::fs::File;
+use std::fs::{read, File};
 
 pub fn load_png(filename: &str) -> Result<Image, ()> {
-    let data = File::open(filename).map_err(|_| ())?;
-    let decoder = Decoder::new(BufReader::new(data));
-    let mut reader = decoder.read_info().map_err(|_| ())?;
+    let file = File::open(filename).map_err(|_| ())?;
+    let mut decoder = Decoder::new(file);
+    decoder.set_output_format(Format::Rgba8);
+    let (out_info, mut reader) = decoder.read_info().map_err(|_| ())?;
+    let size = reader.output_buffer_size();
 
-    let size = match reader.output_buffer_size() {
-        Some(size) => size,
-        None => return Err(()),
-    };
+    let mut out = vec![0; size];
+    reader.next_frame(&mut out).map_err(|_| ())?;
 
-    let mut buffer = vec![0; size];
-    let info = reader.next_frame(&mut buffer).map_err(|_| ())?;
-    let bytes = &buffer[..info.buffer_size()];
-
-    Ok(Image {
-        width: info.width,
-        height: info.height,
-        data: bytes.to_vec(),
+    Ok(Image{
+        width: reader.info().width,
+        height: reader.info().height,
+        data: out,
     })
 }
