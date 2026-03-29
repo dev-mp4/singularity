@@ -1,2 +1,4 @@
-/target
-Cargo.lock
+/subprojects
+/build
+/.cache
+compile_commands.json
