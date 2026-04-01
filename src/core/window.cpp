@@ -25,11 +25,11 @@ bool Window::init() {
     return true;
 }
 
-void Window::update() const {
+void Window::update() {
     glfwSwapBuffers(window);
 }
 
-bool Window::shouldClose() const {
+bool Window::shouldClose() {
     return glfwWindowShouldClose(window);
 }
 
@@ -37,10 +37,10 @@ void* Window::getGLProcLoader() {
     return (void*) glfwGetProcAddress;
 }
 
-int Window::getWidth() const {
+int Window::getWidth() {
     return width;
 }
 
-int Window::getHeight() const {
+int Window::getHeight() {
     return height;
 }

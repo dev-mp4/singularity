@@ -8,7 +8,7 @@ public:
     Mesh(const std::vector<float>& vertices, const std::vector<unsigned int>& indices, const std::vector<unsigned char>& attributes);
     ~Mesh();
 
-    void draw() const;
+    void draw();
     void destroy();
 
 private:

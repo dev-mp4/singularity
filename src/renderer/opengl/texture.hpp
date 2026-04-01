@@ -10,7 +10,7 @@ public:
     Texture(unsigned int id);
     ~Texture();
 
-    void bind(int x) const;
+    void bind(int x);
     void destroy();
     static std::expected<Texture, std::string> loadFromImage(Image data);
 

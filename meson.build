@@ -7,7 +7,9 @@ srcs = [
     'src/renderer/opengl/shader.cpp',
     'src/renderer/opengl/mesh.cpp',
     'src/renderer/opengl/texture.cpp',
-    'src/loader/png.cpp'
+    'src/loader/png.cpp',
+    'src/core/ecs/componentregistry.cpp',
+    'src/core/ecs/entitymanager.cpp'
 ]
 
 glad_inc = include_directories('glad/include')

@@ -4,7 +4,7 @@
 Shader::Shader(unsigned int id) : id(id) {}
 Shader::~Shader() {}
 
-void Shader::use() const {
+void Shader::use() {
     if (id) glUseProgram(id);
 }
 

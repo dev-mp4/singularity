@@ -10,12 +10,12 @@ public:
     ~Window();
 
     bool init();
-    void update() const;
+    void update();
     static void* getGLProcLoader();
-    bool shouldClose() const;
+    bool shouldClose();
 
-    int getWidth() const;
-    int getHeight() const;
+    int getWidth();
+    int getHeight();
 
 private:
     GLFWwindow* window;

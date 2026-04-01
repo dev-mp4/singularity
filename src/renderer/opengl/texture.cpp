@@ -4,7 +4,7 @@
 Texture::Texture(unsigned int id) : id(id) {}
 Texture::~Texture() {}
 
-void Texture::bind(int x) const {
+void Texture::bind(int x) {
     if (id) {
         glActiveTexture(GL_TEXTURE0 + x);
         glBindTexture(GL_TEXTURE_2D, id);

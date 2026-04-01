@@ -9,7 +9,7 @@ public:
     Shader(unsigned int id);
     ~Shader();
 
-    void use() const;
+    void use();
     void destroy();
     static std::expected<Shader, std::string> loadFromGLSL(const std::string& vertex, const std::string& fragment);
 
