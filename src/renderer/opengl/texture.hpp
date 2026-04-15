@@ -1,18 +1,18 @@
 #ifndef SINGULARITY_TEXTURE_HPP
 #define SINGULARITY_TEXTURE_HPP
 
-#include <expected>
-#include <string>
+#include <util/result.hpp>
 #include <util/types.hpp>
+#include <renderer/itexture.hpp>
 
-class Texture {
+class Texture : public ITexture {
 public:
     Texture(unsigned int id);
-    ~Texture();
+    ~Texture() override;
 
-    void bind(int x);
-    void destroy();
-    static std::expected<Texture, std::string> loadFromImage(Image data);
+    void bind(int index) override;
+    void destroy() override;
+    static Result<Texture> loadFromImage(Image data);
 
 private:
     unsigned int id;

@@ -1,12 +1,13 @@
 #include "texture.hpp"
 #include <glad/glad.h>
+#include <util/result.hpp>
 
 Texture::Texture(unsigned int id) : id(id) {}
 Texture::~Texture() {}
 
-void Texture::bind(int x) {
+void Texture::bind(int index) {
     if (id) {
-        glActiveTexture(GL_TEXTURE0 + x);
+        glActiveTexture(GL_TEXTURE0 + index);
         glBindTexture(GL_TEXTURE_2D, id);
     }
 }
@@ -15,7 +16,7 @@ void Texture::destroy() {
     if (id) glDeleteTextures(1, &id); id = 0;
 }
 
-std::expected<Texture, std::string> Texture::loadFromImage(Image image) {
+Result<Texture> Texture::loadFromImage(Image image) {
     GLuint texture;
     
     glGenTextures(1, &texture);

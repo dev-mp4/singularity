@@ -1,4 +1,9 @@
-#include "core/ecs/componentregistry.hpp"
+#include "core/ecs/entity.hpp"
+#include "core/ecs/systemregistry.hpp"
+#include <core/ecs/componentregistry.hpp>
+#include <core/engine.hpp>
+#include <renderer/imesh.hpp>
+#include <renderer/itexture.hpp>
 #include <loader/png.hpp>
 #include <renderer/opengl/texture.hpp>
 #include <iostream>
@@ -24,77 +29,81 @@ std::vector<unsigned int> indices = {
     0, 1, 2, 2, 3, 0
 };
 
-struct Position {
-    float x;
-    float y;
-    float z;
+struct MeshComponent {
+    IShader* shader;
+    ITexture* texture;
+    IMesh* mesh;
 };
 
-int main() {
-    // Window window("Singularity", 1280, 720, false);
-    // if (!window.init()) {
-    //     std::cerr << "Failed to create GLFW window" << std::endl;
-    //     return 1;
-    // }
-
-    // if (!OpenGL::init(1280, 720)) {
-    //     std::cerr << "Failed to init OpenGL" << std::endl;
-    //     return 1;
-    // }
-
-    // std::string vertexShader = readFile("res/vertex.glsl");
-    // std::string fragmentShader = readFile("res/fragment.glsl");
-
-    // std::expected<Shader, std::string> shaderExpected = Shader::loadFromGLSL(vertexShader, fragmentShader);
-    // if (!shaderExpected.has_value()) {
-    //     std::cerr << "Failed to compile shader: " << shaderExpected.error() << std::endl;
-    //     return 1;
-    // }
-    // Shader shader = shaderExpected.value();
-
-    // Mesh mesh(vertices, indices, {3, 2});
-
-    // std::expected<Image, std::string> imageExpected = PNG::loadFromFile("res/dirt.png");
-    // if (!imageExpected.has_value()) {
-    //     std::cerr << "Failed to load image: " << imageExpected.error() << std::endl;
-    //     return 1;
-    // }
-    // Image image = imageExpected.value();
-
-    // std::expected<Texture, std::string> textureExpected = Texture::loadFromImage(image);
-    // if (!textureExpected.has_value()) {
-    //     std::cerr << "Failed to create texture: " << textureExpected.error() << std::endl;
-    //     return 1;
-    // }
-    // Texture texture = textureExpected.value();
-
-    // while (!window.shouldClose()) {
-    //     glfwPollEvents();
-
-    //     OpenGL::clear(0.15f, 0.15f, 0.15f);
-
-    //     shader.use();
-    //     texture.bind(0);
-    //     mesh.draw();
-
-    //     window.update();
-    // }
-
-    // mesh.destroy();
-    // shader.destroy();
-
-    Position position {1.0f, 1.0f, 0.0f};
-
-    ComponentRegistry registry;
-    registry.registerComponent<Position>();
-
-    auto storage = static_cast<ComponentStorage<Position>*>(registry.getStorage<Position>());
-    storage->insert(1, position);
-
-    Query<Position> q(registry);
-    for (auto& [pos] : q.query()) {
-        std::cout << pos->x << std::endl;
+void meshRenderer() {
+    Query<MeshComponent> q(Engine::getInstance()->scene.getComponentRegistry());
+    for (auto& [mesh] : q.query()) {
+        mesh->shader->use();
+        mesh->texture->bind(0);
+        mesh->mesh->draw();
     }
+}
+
+int main() {
+    Engine engine;
+    if (!engine.init(RendererKind::OPENGL_CORE, "Singularity", 1280, 720, false)) {
+        return 1;
+    }
+
+    std::string vertexShader = readFile("res/vertex.glsl");
+    std::string fragmentShader = readFile("res/fragment.glsl");
+
+    Result<Shader> shaderResult = Shader::loadFromGLSL(vertexShader, fragmentShader);
+    if (!shaderResult.hasValue()) {
+        std::cerr << "Failed to compile shader: " << shaderResult.error() << std::endl;
+        return 1;
+    }
+    Shader shader = shaderResult.value();
+
+    Mesh mesh(vertices, indices, {3, 2});
+
+    Result<Image> imageResult = PNG::loadFromFile("res/dirt.png");
+    if (!imageResult.hasValue()) {
+        std::cerr << "Failed to load image: " << imageResult.error() << std::endl;
+        return 1;
+    }
+    Image image = imageResult.value();
+
+    Result<Texture> textureResult = Texture::loadFromImage(image);
+    if (!textureResult.hasValue()) {
+        std::cerr << "Failed to create texture: " << textureResult.error() << std::endl;
+        return 1;
+    }
+    Texture texture = textureResult.value();
+
+    MeshComponent meshComp {&shader, &texture, &mesh};
+
+    ComponentRegistry componentRegistry;
+    SystemRegistry systemRegistry;
+    EntityManager manager;
+
+    Scene scene(componentRegistry, systemRegistry, manager);
+
+    scene.getComponentRegistry().registerComponent<MeshComponent>();
+
+    Entity entity = scene.getEntityManager().create();
+
+    auto storage = static_cast<ComponentStorage<MeshComponent>*>(scene.getComponentRegistry().getStorage<MeshComponent>());
+    storage->insert(entity, meshComp);
+
+    scene.getSystemRegistry().registerSystem(meshRenderer);
+
+    engine.scene = std::move(scene);
+
+    while (engine.running) {
+        engine.update();
+    }
+
+    mesh.destroy();
+    shader.destroy();
+    texture.destroy();
+
+    engine.destroy();
 
     return 0;
 }

@@ -9,7 +9,10 @@ srcs = [
     'src/renderer/opengl/texture.cpp',
     'src/loader/png.cpp',
     'src/core/ecs/componentregistry.cpp',
-    'src/core/ecs/entitymanager.cpp'
+    'src/core/ecs/entitymanager.cpp',
+    'src/core/engine.cpp',
+    'src/core/scene.cpp',
+    'src/core/ecs/systemregistry.cpp'
 ]
 
 glad_inc = include_directories('glad/include')
@@ -20,7 +23,11 @@ glad_lib = static_library(
 )
 
 glfw_dep = dependency('glfw3')
-spng_dep = dependency('spng')
+spng_dep = dependency('spng', required: false)
+
+if not spng_dep.found()
+  spng_dep = dependency('libspng', required: true)
+endif
 
 cpp = meson.get_compiler('cpp')
 
@@ -49,7 +56,7 @@ if host_machine.system() == 'windows'
 
     compiler_args = ['/std:c++latest']
 else
-    compiler_args = ['-std=c++latest']
+    compiler_args = ['-std=c++23']
 endif
 
 executable(

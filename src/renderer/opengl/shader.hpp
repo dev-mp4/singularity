@@ -1,17 +1,18 @@
 #ifndef SINGULARITY_SHADER_HPP
 #define SINGULARITY_SHADER_HPP
 
+#include <util/result.hpp>
 #include <string>
-#include <expected>
+#include <renderer/ishader.hpp>
 
-class Shader {
+class Shader : public IShader {
 public:
     Shader(unsigned int id);
-    ~Shader();
+    ~Shader() override;
 
-    void use();
-    void destroy();
-    static std::expected<Shader, std::string> loadFromGLSL(const std::string& vertex, const std::string& fragment);
+    void use() override;
+    void destroy() override;
+    static Result<Shader> loadFromGLSL(const std::string& vertex, const std::string& fragment);
 
 private:
     unsigned int id;

@@ -1,5 +1,6 @@
 #include "shader.hpp"
 #include <glad/glad.h>
+#include <util/result.hpp>
 
 Shader::Shader(unsigned int id) : id(id) {}
 Shader::~Shader() {}
@@ -8,7 +9,7 @@ void Shader::use() {
     if (id) glUseProgram(id);
 }
 
-std::expected<Shader, std::string> Shader::loadFromGLSL(const std::string& vertex, const std::string& fragment) {
+Result<Shader> Shader::loadFromGLSL(const std::string& vertex, const std::string& fragment) {
     GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
     GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 
@@ -24,7 +25,7 @@ std::expected<Shader, std::string> Shader::loadFromGLSL(const std::string& verte
     if (!success) {
         glGetShaderInfoLog(vertexShader, 512, &length, infoLog);
         glDeleteShader(vertexShader);
-        return std::unexpected(std::string(infoLog, length));
+        return Result<Shader>::fail(std::string(infoLog, length));
     }
 
     // Fragment shader compilation
@@ -36,7 +37,7 @@ std::expected<Shader, std::string> Shader::loadFromGLSL(const std::string& verte
         glGetShaderInfoLog(fragmentShader, 512, &length, infoLog);
         glDeleteShader(vertexShader);
         glDeleteShader(fragmentShader);
-        return std::unexpected(std::string(infoLog, length));
+        return Result<Shader>::fail(std::string(infoLog, length));
     }
 
     GLuint program = glCreateProgram();
@@ -51,7 +52,7 @@ std::expected<Shader, std::string> Shader::loadFromGLSL(const std::string& verte
     if (!success) {
         glGetProgramInfoLog(program, 512, &length, infoLog);
         glDeleteProgram(program);
-        return std::unexpected(std::string(infoLog, length));
+        return Result<Shader>::fail(std::string(infoLog, length));
     }
 
     return Shader(program);

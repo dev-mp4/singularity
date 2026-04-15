@@ -2,14 +2,15 @@
 #define SINGULARITY_MESH_HPP
 
 #include <vector>
+#include <renderer/imesh.hpp>
 
-class Mesh {
+class Mesh : public IMesh {
 public:
     Mesh(const std::vector<float>& vertices, const std::vector<unsigned int>& indices, const std::vector<unsigned char>& attributes);
-    ~Mesh();
+    ~Mesh() override;
 
-    void draw();
-    void destroy();
+    void draw() override;
+    void destroy() override;
 
 private:
     unsigned int vao, vbo, ebo, indicesCount;

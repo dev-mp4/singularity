@@ -4,9 +4,10 @@
 #include <string>
 #include <expected>
 #include <util/types.hpp>
+#include <util/result.hpp>
 
 namespace PNG {
-    std::expected<Image, std::string> loadFromFile(const std::string& filename);
+    Result<Image> loadFromFile(const std::string& filename);
 }
 
 #endif // SINGULARITY_PNG_HPP

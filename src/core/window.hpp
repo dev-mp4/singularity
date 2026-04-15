@@ -6,16 +6,20 @@ class GLFWwindow;
 
 class Window {
 public:
-    Window(const std::string& title, int width, int height, bool fullscreen);
+    Window();
     ~Window();
 
-    bool init();
+    bool init(const std::string& title, int width, int height, bool fullscreen);
     void update();
     static void* getGLProcLoader();
     bool shouldClose();
 
     int getWidth();
     int getHeight();
+
+    static double getTime();
+
+    void destroy();
 
 private:
     GLFWwindow* window;

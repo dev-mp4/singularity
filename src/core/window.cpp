@@ -2,14 +2,11 @@
 
 #include <GLFW/glfw3.h>
 
-Window::Window(const std::string& title, int width, int height, bool fullscreen) : window(nullptr), title(title), width(width),
-                                                                                   height(height), fullscreen(fullscreen) {}
+Window::Window() : window(nullptr) {}
 
-Window::~Window() {
-    glfwTerminate();
-}
+Window::~Window() {}
 
-bool Window::init() {
+bool Window::init(const std::string& title, int width, int height, bool fullscreen) {
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -43,4 +40,12 @@ int Window::getWidth() {
 
 int Window::getHeight() {
     return height;
+}
+
+double Window::getTime() {
+    return glfwGetTime();
+}
+
+void Window::destroy() {
+    glfwTerminate();
 }

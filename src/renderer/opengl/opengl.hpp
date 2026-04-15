@@ -3,7 +3,7 @@
 
 class OpenGL {
 public:
-    static bool init(int width, int heigh);
+    static bool init(int width, int height);
     static void clear(float r, float g, float b);
 };
 
