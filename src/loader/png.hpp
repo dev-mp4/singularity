@@ -2,7 +2,6 @@
 #define SINGULARITY_PNG_HPP
 
 #include <string>
-#include <expected>
 #include <util/types.hpp>
 #include <util/result.hpp>
 
