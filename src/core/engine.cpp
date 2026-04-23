@@ -43,7 +43,7 @@ void Engine::clear(float r, float g, float b) {
 void Engine::update() {
     glfwPollEvents();
 
-    running = !window.shouldClose();
+    running = !window.shouldClose() && !world.should_quit();
 
     clear(0.0f, 0.0f, 0.0f);
 
@@ -51,7 +51,15 @@ void Engine::update() {
     deltaTime = time - lastTime;
     lastTime = time;
 
-    scene.getSystemRegistry().update();
+    world.progress();
 
     window.update();
+}
+
+void Engine::run() {
+    while (running) {
+        update();
+    }
+
+    world.quit();
 }

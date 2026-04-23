@@ -8,11 +8,7 @@ srcs = [
     'src/renderer/opengl/mesh.cpp',
     'src/renderer/opengl/texture.cpp',
     'src/loader/png.cpp',
-    'src/core/ecs/componentregistry.cpp',
-    'src/core/ecs/entitymanager.cpp',
-    'src/core/engine.cpp',
-    'src/core/scene.cpp',
-    'src/core/ecs/systemregistry.cpp'
+    'src/core/engine.cpp'
 ]
 
 glad_inc = include_directories('glad/include')
@@ -22,12 +18,15 @@ glad_lib = static_library(
     include_directories: glad_inc,
 )
 
-glfw_dep = dependency('glfw3')
-spng_dep = dependency('spng', required: false)
+glfw_dep = dependency('glfw3', required: true)
+spng_dep = dependency('spng', required: true)
 
 if not spng_dep.found()
   spng_dep = dependency('libspng', required: true)
 endif
+
+flecs_proj = subproject('flecs')
+flecs_dep = flecs_proj.get_variable('flecs_dep')
 
 cpp = meson.get_compiler('cpp')
 
@@ -62,7 +61,7 @@ endif
 executable(
     'singularity',
     srcs,
-    dependencies: [glfw_dep, spng_dep],
+    dependencies: [glfw_dep, spng_dep, flecs_dep,],
     link_with: [glad_lib],
     include_directories: [glad_inc, include_directories('src')],
     cpp_args: compiler_args

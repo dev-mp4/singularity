@@ -1,8 +1,8 @@
 #ifndef SINGULARITY_ENGINE_HPP
 #define SINGULARITY_ENGINE_HPP
 
-#include <core/scene.hpp>
 #include <core/window.hpp>
+#include <flecs.h>
 
 enum class RendererKind {
     OPENGL_CORE
@@ -15,7 +15,7 @@ public:
 
     static Engine* getInstance();
 
-    Scene scene;
+    flecs::world world;
 
     Window window;
 
@@ -25,6 +25,8 @@ public:
     void clear(float r, float g, float b);
 
     void update();
+
+    void run();
 
     float deltaTime;
     float time;

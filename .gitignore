@@ -1,4 +1,6 @@
-/subprojects
+/subprojects/*
+!/subprojects/*.wrap
+!/subprojects/flecs
 /build
 /.cache
 compile_commands.json
