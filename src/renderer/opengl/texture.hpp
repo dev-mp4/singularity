@@ -1,7 +1,6 @@
 #ifndef SINGULARITY_TEXTURE_HPP
 #define SINGULARITY_TEXTURE_HPP
 
-#include <util/result.hpp>
 #include <util/types.hpp>
 #include <renderer/itexture.hpp>
 
@@ -12,7 +11,7 @@ public:
 
     void bind(int index) override;
     void destroy() override;
-    static Result<Texture> loadFromImage(Image data);
+    static Texture* loadFromImage(Image* image);
 
 private:
     unsigned int id;

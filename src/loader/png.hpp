@@ -3,10 +3,9 @@
 
 #include <string>
 #include <util/types.hpp>
-#include <util/result.hpp>
 
 namespace PNG {
-    Result<Image> loadFromFile(const std::string& filename);
+    Image* loadFromFile(const std::string& filename);
 }
 
 #endif // SINGULARITY_PNG_HPP

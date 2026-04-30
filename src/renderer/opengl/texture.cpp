@@ -1,6 +1,5 @@
 #include "texture.hpp"
 #include <glad/glad.h>
-#include <util/result.hpp>
 
 Texture::Texture(unsigned int id) : id(id) {}
 Texture::~Texture() {}
@@ -16,7 +15,7 @@ void Texture::destroy() {
     if (id) glDeleteTextures(1, &id); id = 0;
 }
 
-Result<Texture> Texture::loadFromImage(Image image) {
+Texture* Texture::loadFromImage(Image* image) {
     GLuint texture;
     
     glGenTextures(1, &texture);
@@ -28,10 +27,10 @@ Result<Texture> Texture::loadFromImage(Image image) {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.width, image.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image.data.data());
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image->width, image->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image->data.data());
     glGenerateMipmap(GL_TEXTURE_2D);
 
     glBindTexture(GL_TEXTURE_2D, 0);
 
-    return Texture(texture);
+    return new Texture(texture);
 }

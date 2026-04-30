@@ -1,6 +1,6 @@
 #include "shader.hpp"
 #include <glad/glad.h>
-#include <util/result.hpp>
+#include <iostream>
 
 Shader::Shader(unsigned int id) : id(id) {}
 Shader::~Shader() {}
@@ -9,7 +9,7 @@ void Shader::use() {
     if (id) glUseProgram(id);
 }
 
-Result<Shader> Shader::loadFromGLSL(const std::string& vertex, const std::string& fragment) {
+Shader* Shader::loadFromGLSL(const std::string& vertex, const std::string& fragment) {
     GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
     GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 
@@ -25,7 +25,8 @@ Result<Shader> Shader::loadFromGLSL(const std::string& vertex, const std::string
     if (!success) {
         glGetShaderInfoLog(vertexShader, 512, &length, infoLog);
         glDeleteShader(vertexShader);
-        return Result<Shader>::fail(std::string(infoLog, length));
+        std::cerr << "Failed to compile vertex shader: " << infoLog << std::endl;
+        return nullptr;
     }
 
     // Fragment shader compilation
@@ -37,7 +38,8 @@ Result<Shader> Shader::loadFromGLSL(const std::string& vertex, const std::string
         glGetShaderInfoLog(fragmentShader, 512, &length, infoLog);
         glDeleteShader(vertexShader);
         glDeleteShader(fragmentShader);
-        return Result<Shader>::fail(std::string(infoLog, length));
+        std::cerr << "Failed to link shader: " << infoLog << std::endl;
+        return nullptr;
     }
 
     GLuint program = glCreateProgram();
@@ -52,10 +54,11 @@ Result<Shader> Shader::loadFromGLSL(const std::string& vertex, const std::string
     if (!success) {
         glGetProgramInfoLog(program, 512, &length, infoLog);
         glDeleteProgram(program);
-        return Result<Shader>::fail(std::string(infoLog, length));
+        std::cerr << "Failed to link shader: " << infoLog << std::endl;
+        return nullptr;
     }
 
-    return Shader(program);
+    return new Shader(program);
 }
 
 void Shader::destroy() {

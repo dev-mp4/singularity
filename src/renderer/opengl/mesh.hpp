@@ -6,10 +6,11 @@
 
 class Mesh : public IMesh {
 public:
-    Mesh(const std::vector<float>& vertices, const std::vector<unsigned int>& indices, const std::vector<unsigned char>& attributes);
+    Mesh(unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int indicesCount);
     ~Mesh() override;
 
     void draw() override;
+    static Mesh* create(const std::vector<float>& vertices, const std::vector<unsigned int>& indices, const std::vector<unsigned char>& attributes);
     void destroy() override;
 
 private:

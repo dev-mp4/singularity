@@ -2,6 +2,7 @@
 #define SINGULARITY_ENGINE_HPP
 
 #include <core/window.hpp>
+#include <core/resourcemanager.hpp>
 #include <flecs.h>
 
 enum class RendererKind {
@@ -16,6 +17,8 @@ public:
     static Engine* getInstance();
 
     flecs::world world;
+
+    ResourceManager resourceManager;
 
     Window window;
 

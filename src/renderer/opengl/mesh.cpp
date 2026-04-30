@@ -2,7 +2,26 @@
 #include <glad/glad.h>
 #include <numeric>
 
-Mesh::Mesh(const std::vector<float>& vertices, const std::vector<unsigned int>& indices, const std::vector<unsigned char>& attributes) {
+Mesh::Mesh(unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int indicesCount) :
+    vao(vao), vbo(vbo), ebo(ebo), indicesCount(indicesCount) {}
+
+Mesh::~Mesh() {}
+
+void Mesh::draw() {
+    glBindVertexArray(vao);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+    glDrawElements(GL_TRIANGLES, indicesCount, GL_UNSIGNED_INT, nullptr);
+}
+
+void Mesh::destroy() {
+    if (vao) glDeleteVertexArrays(1, &vao); vao = 0;
+    if (vbo) glDeleteBuffers(1, &vbo); vbo = 0;
+    if (ebo) glDeleteBuffers(1, &ebo); ebo = 0;
+}
+
+Mesh* Mesh::create(const std::vector<float>& vertices, const std::vector<unsigned int>& indices, const std::vector<unsigned char>& attributes) {
+    unsigned int vao, vbo, ebo, indicesCount;
+
     indicesCount = indices.size();
 
     glGenVertexArrays(1, &vao);
@@ -28,18 +47,6 @@ Mesh::Mesh(const std::vector<float>& vertices, const std::vector<unsigned int>& 
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
 
     glBindVertexArray(0);
-}
 
-Mesh::~Mesh() {}
-
-void Mesh::draw() {
-    glBindVertexArray(vao);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-    glDrawElements(GL_TRIANGLES, indicesCount, GL_UNSIGNED_INT, nullptr);
-}
-
-void Mesh::destroy() {
-    if (vao) glDeleteVertexArrays(1, &vao); vao = 0;
-    if (vbo) glDeleteBuffers(1, &vbo); vbo = 0;
-    if (ebo) glDeleteBuffers(1, &ebo); ebo = 0;
+    return new Mesh(vao, vbo, ebo, indicesCount);
 }

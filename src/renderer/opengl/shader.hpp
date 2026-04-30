@@ -1,7 +1,6 @@
 #ifndef SINGULARITY_SHADER_HPP
 #define SINGULARITY_SHADER_HPP
 
-#include <util/result.hpp>
 #include <string>
 #include <renderer/ishader.hpp>
 
@@ -12,7 +11,7 @@ public:
 
     void use() override;
     void destroy() override;
-    static Result<Shader> loadFromGLSL(const std::string& vertex, const std::string& fragment);
+    static Shader* loadFromGLSL(const std::string& vertex, const std::string& fragment);
 
 private:
     unsigned int id;

@@ -1,4 +1,7 @@
+#include "core/resourceid.hpp"
+#include "renderer/ishader.hpp"
 #include <core/engine.hpp>
+#include <cstddef>
 #include <renderer/imesh.hpp>
 #include <renderer/itexture.hpp>
 #include <loader/png.hpp>
@@ -25,9 +28,9 @@ std::vector<unsigned int> indices = {
 };
 
 struct MeshComponent {
-    IShader* shader;
-    ITexture* texture;
-    IMesh* mesh;
+    ResourceID<IShader>  shader;
+    ResourceID<ITexture> texture;
+    ResourceID<IMesh>    mesh;
 };
 
 int main() {
@@ -36,47 +39,52 @@ int main() {
         return 1;
     }
 
+    engine.resourceManager.registerResource<IShader>();
+    engine.resourceManager.registerResource<ITexture>();
+    engine.resourceManager.registerResource<IMesh>();
+
     std::string vertexShader = readFile("res/vertex.glsl");
     std::string fragmentShader = readFile("res/fragment.glsl");
 
-    Result<Shader> shaderResult = Shader::loadFromGLSL(vertexShader, fragmentShader);
-    if (!shaderResult.hasValue()) {
-        std::cerr << "Failed to compile shader: " << shaderResult.error() << std::endl;
+    Shader* shader = Shader::loadFromGLSL(vertexShader, fragmentShader);
+    if (shader == nullptr)
         return 1;
-    }
-    Shader shader = shaderResult.value();
 
-    Mesh mesh(vertices, indices, {3, 2});
+    ResourceID<IShader> shaderID = engine.resourceManager.add<IShader>(shader);
 
-    Result<Image> imageResult = PNG::loadFromFile("res/dirt.png");
-    if (!imageResult.hasValue()) {
-        std::cerr << "Failed to load image: " << imageResult.error() << std::endl;
+    Mesh* mesh = Mesh::create(vertices, indices, {3, 2});
+
+    ResourceID<IMesh> meshID = engine.resourceManager.add<IMesh>(mesh);
+
+    Image* image = PNG::loadFromFile("res/dirt.png");
+    if (image == nullptr)
         return 1;
-    }
-    Image image = imageResult.value();
 
-    Result<Texture> textureResult = Texture::loadFromImage(image);
-    if (!textureResult.hasValue()) {
-        std::cerr << "Failed to create texture: " << textureResult.error() << std::endl;
+    Texture* texture = Texture::loadFromImage(image);
+    if (texture == nullptr)
         return 1;
-    }
-    Texture texture = textureResult.value();
 
-    MeshComponent meshComp {&shader, &texture, &mesh};
+    ResourceID<ITexture> textureID = engine.resourceManager.add<ITexture>(texture);
+
+    MeshComponent meshComp {shaderID, textureID, meshID};
     
     engine.world.entity("ent").set<MeshComponent>(meshComp);
 
     engine.world.system<MeshComponent>().each([](MeshComponent& c){
-        c.shader->use();
-        c.texture->bind(0);
-        c.mesh->draw();
+        IShader* shader = Engine::getInstance()->resourceManager.get(c.shader);
+        ITexture* texture = Engine::getInstance()->resourceManager.get(c.texture);
+        IMesh* mesh = Engine::getInstance()->resourceManager.get(c.mesh);
+
+        shader->use();
+        texture->bind(0);
+        mesh->draw();
     });
 
     engine.run();
 
-    mesh.destroy();
-    shader.destroy();
-    texture.destroy();
+    mesh->destroy();
+    shader->destroy();
+    texture->destroy();
 
     engine.destroy();
 
