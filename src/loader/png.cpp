@@ -2,11 +2,12 @@
 #include <iostream>
 #include <spng.h>
 #include <fstream>
+#include <logger/logger.hpp>
 
 Image* PNG::loadFromFile(const std::string& filename) {
     std::ifstream file(filename, std::ios::binary | std::ios::ate);
     if (!file) {
-        std::cerr << "Failed to open " << filename << std::endl;
+        Log::error() << "Failed to open " << filename;
         return nullptr;
     }
 
@@ -15,20 +16,20 @@ Image* PNG::loadFromFile(const std::string& filename) {
 
     std::vector<unsigned char> buffer(size);
     if (!file.read(reinterpret_cast<char*>(buffer.data()), size)) {
-        std::cerr << "Failed to read " << filename << std::endl;
+        Log::error() << "Failed to read " << filename;
         return nullptr;
     }
 
     spng_ctx* ctx = spng_ctx_new(0);
     if (!ctx) {
-        std::cerr << "Failed to create context" << std::endl;
+        Log::error() << "Failed to create context";
         return nullptr;
     }
 
     int ret = spng_set_png_buffer(ctx, buffer.data(), buffer.size());;
     if (ret) {
         spng_ctx_free(ctx);
-        std::cerr << "Failed to set PNG buffer: " << spng_strerror(ret) << std::endl;
+        Log::error() << "Failed to set PNG buffer: " << spng_strerror(ret);
         return nullptr;
     }
 
@@ -36,7 +37,7 @@ Image* PNG::loadFromFile(const std::string& filename) {
     ret = spng_get_ihdr(ctx, &ihdr);
     if (ret) {
         spng_ctx_free(ctx);
-        std::cerr << "Failed to read PNG header: " << spng_strerror(ret) << std::endl;
+        Log::error() << "Failed to read PNG header: " << spng_strerror(ret);
         return nullptr;
     }
 
@@ -47,7 +48,7 @@ Image* PNG::loadFromFile(const std::string& filename) {
     ret = spng_decoded_image_size(ctx, SPNG_FMT_RGBA8, &out_size);
     if (ret) {
         spng_ctx_free(ctx);
-        std::cerr << "Failed to get image size: " << spng_strerror(ret) << std::endl;
+        Log::error() << "Failed to get image size: " << spng_strerror(ret);
         return nullptr;
     }
 
@@ -55,7 +56,7 @@ Image* PNG::loadFromFile(const std::string& filename) {
     ret = spng_decode_image(ctx, pixels.data(), out_size, SPNG_FMT_RGBA8, 0);
     if (ret) {
         spng_ctx_free(ctx);
-        std::cerr << "Failed to decode PNG image: " << spng_strerror(ret) << std::endl;
+        Log::error() << "Failed to decode PNG image: " << spng_strerror(ret);
         return nullptr;
     }
 

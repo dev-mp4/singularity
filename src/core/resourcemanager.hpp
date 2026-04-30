@@ -1,7 +1,6 @@
 #ifndef SINGULARITY_RESOURCEMANAGER_HPP
 #define SINGULARITY_RESOURCEMANAGER_HPP
 
-#include <any>
 #include <cstddef>
 #include <memory>
 #include <typeindex>

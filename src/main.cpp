@@ -1,5 +1,5 @@
-#include "core/resourceid.hpp"
-#include "renderer/ishader.hpp"
+#include <core/resourceid.hpp>
+#include <renderer/ishader.hpp>
 #include <core/engine.hpp>
 #include <renderer/imesh.hpp>
 #include <renderer/itexture.hpp>
@@ -13,6 +13,7 @@
 #include <renderer/opengl/mesh.hpp>
 #include <util/file.hpp>
 #include <loader/png.hpp>
+#include <logger/logger.hpp>
 
 std::vector<float> vertices = {
     -0.5f, -0.5f, 0.0f, -1.0f, -1.0f,

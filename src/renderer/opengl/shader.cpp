@@ -1,6 +1,7 @@
 #include "shader.hpp"
 #include <glad/glad.h>
 #include <iostream>
+#include <logger/logger.hpp>
 
 Shader::Shader(unsigned int id) : id(id) {}
 Shader::~Shader() {}
@@ -25,7 +26,7 @@ Shader* Shader::loadFromGLSL(const std::string& vertex, const std::string& fragm
     if (!success) {
         glGetShaderInfoLog(vertexShader, 512, &length, infoLog);
         glDeleteShader(vertexShader);
-        std::cerr << "Failed to compile vertex shader: " << infoLog << std::endl;
+        Log::error() << "Failed to compile vertex shader: " << infoLog;
         return nullptr;
     }
 
@@ -38,7 +39,7 @@ Shader* Shader::loadFromGLSL(const std::string& vertex, const std::string& fragm
         glGetShaderInfoLog(fragmentShader, 512, &length, infoLog);
         glDeleteShader(vertexShader);
         glDeleteShader(fragmentShader);
-        std::cerr << "Failed to link shader: " << infoLog << std::endl;
+        Log::error() << "Failed to link shader: " << infoLog;
         return nullptr;
     }
 
@@ -54,7 +55,7 @@ Shader* Shader::loadFromGLSL(const std::string& vertex, const std::string& fragm
     if (!success) {
         glGetProgramInfoLog(program, 512, &length, infoLog);
         glDeleteProgram(program);
-        std::cerr << "Failed to link shader: " << infoLog << std::endl;
+        Log::error() << "Failed to link shader: " << infoLog;
         return nullptr;
     }
 
