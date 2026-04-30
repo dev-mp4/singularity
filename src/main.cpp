@@ -1,12 +1,10 @@
 #include "core/resourceid.hpp"
 #include "renderer/ishader.hpp"
 #include <core/engine.hpp>
-#include <cstddef>
 #include <renderer/imesh.hpp>
 #include <renderer/itexture.hpp>
 #include <loader/png.hpp>
 #include <renderer/opengl/texture.hpp>
-#include <iostream>
 #include <GLFW/glfw3.h>
 
 #include <core/window.hpp>
@@ -81,10 +79,6 @@ int main() {
     });
 
     engine.run();
-
-    mesh->destroy();
-    shader->destroy();
-    texture->destroy();
 
     engine.destroy();
 

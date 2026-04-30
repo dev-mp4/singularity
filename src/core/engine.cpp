@@ -30,6 +30,7 @@ bool Engine::init(RendererKind rendererKind, const std::string& title, int width
 }
 
 void Engine::destroy() {
+    resourceManager.destroy();
     window.destroy();
 }
 

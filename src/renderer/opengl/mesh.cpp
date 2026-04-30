@@ -1,5 +1,6 @@
 #include "mesh.hpp"
 #include <glad/glad.h>
+#include <iostream>
 #include <numeric>
 
 Mesh::Mesh(unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int indicesCount) :

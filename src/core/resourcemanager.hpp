@@ -3,6 +3,7 @@
 
 #include <any>
 #include <cstddef>
+#include <memory>
 #include <typeindex>
 #include <vector>
 #include <algorithm>
@@ -26,7 +27,7 @@ public:
     template<typename T>
     void registerResource() {
         if (!pools.contains(typeid(T))) {
-            pools[typeid(T)] = ResourcePool<T>();
+            pools[typeid(T)] = new ResourcePool<T>();
         }
     }
 
@@ -36,7 +37,7 @@ public:
 
         ResourceID<T> id = {.id=getNextID()};
         
-        get_pool<T>()->set(id, resource);
+        get_pool<T>()->set(id, std::unique_ptr<T>(resource));
 
         return id;
     }
@@ -53,13 +54,21 @@ public:
     bool isValid(std::size_t id) {
         return std::find(free.begin(), free.end(), id) == free.end() && id < next && id != 0;
     }
+
+    void destroy() {
+        for (auto& [k, v] : pools) {
+            v->destroy();
+        }
+        next = 1;
+        free.clear();
+    }
 private:
-    std::unordered_map<std::type_index, std::any> pools;
+    std::unordered_map<std::type_index, IResourcePool*> pools;
 
     template<typename T>
     ResourcePool<T>* get_pool() {
-        if (pools.contains(typeid(T))) return &std::any_cast<ResourcePool<T>&>(pools[typeid(T)]);
-        return nullptr;;
+        if (pools.contains(typeid(T))) return static_cast<ResourcePool<T>*>(pools[typeid(T)]);
+        return nullptr;
     }
 
     std::size_t next = 1;
