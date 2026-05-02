@@ -18,6 +18,9 @@ bool Window::init(const std::string& title, int width, int height, bool fullscre
         return false;
     }
 
+    this->width = width;
+    this->height = height;
+
     glfwMakeContextCurrent(window);
     return true;
 }

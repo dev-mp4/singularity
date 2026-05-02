@@ -35,6 +35,13 @@ public:
     float time;
 
     bool running;
+    
+    static flecs::entity Update;
+    static flecs::entity PostUpdate;
+    static flecs::entity Render;
+    static flecs::entity PostRender;
+
+    static flecs::entity OnSpawn;
 
 private:
     static Engine* instance;

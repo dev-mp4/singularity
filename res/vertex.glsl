@@ -4,8 +4,11 @@ layout (location = 1) in vec2 uv;
 
 out vec2 _fraguv;
 
+uniform mat4 model;
+uniform mat4 projview;
+
 void main()
 {
     _fraguv = uv;
-    gl_Position = vec4(pos, 1.0);
+    gl_Position = projview * model * vec4(pos, 1.0);
 }

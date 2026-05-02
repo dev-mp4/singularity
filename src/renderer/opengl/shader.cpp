@@ -1,7 +1,7 @@
 #include "shader.hpp"
 #include <glad/glad.h>
-#include <iostream>
 #include <logger/logger.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 Shader::Shader(unsigned int id) : id(id) {}
 Shader::~Shader() {}
@@ -64,4 +64,13 @@ Shader* Shader::loadFromGLSL(const std::string& vertex, const std::string& fragm
 
 void Shader::destroy() {
     if (id) glDeleteProgram(id); id = 0;
+}
+
+void Shader::setUniform(const std::string& name, glm::mat4& matrix) {
+    GLint loc = glGetUniformLocation(id, name.c_str());
+    if (loc == -1) {
+        Log::error() << "setUniform " << name << " not found!";
+        return;
+    }
+    glUniformMatrix4fv(loc, 1, false, glm::value_ptr(matrix));
 }

@@ -1,10 +1,17 @@
 #include "engine.hpp"
+#include "flecs/addons/cpp/c_types.hpp"
 #include <logger/logger.hpp>
 #include <GLFW/glfw3.h>
 #include <renderer/opengl/opengl.hpp>
 #include <util/consts.hpp>
 
 Engine* Engine::instance;
+flecs::entity Engine::Update;
+flecs::entity Engine::PostUpdate;
+flecs::entity Engine::Render;
+flecs::entity Engine::PostRender;
+
+flecs::entity Engine::OnSpawn;
 
 Engine::Engine() {
     instance = this;
@@ -33,6 +40,18 @@ bool Engine::init(RendererKind rendererKind, const std::string& title, int width
 
     Log::info() << "Window resolution: " << width << "x" << height;
     Log::info() << "Window title: " << title;
+
+    world.reset();
+
+
+    Update = world.entity("Update").add(flecs::Phase);
+    PostUpdate = world.entity("PostUpdate").add(flecs::Phase).depends_on(Update);
+    Render = world.entity("Render").add(flecs::Phase).depends_on(PostUpdate);
+    PostRender = world.entity("PostRender").add(flecs::Phase).depends_on(Render);
+
+    flecs::entity pipeline = world.pipeline().with(flecs::System).build();
+    
+    world.set_pipeline(pipeline);
 
     return true;
 }

@@ -1,4 +1,12 @@
+#include <glm/fwd.hpp>
+#include <library/components/camera.hpp>
+#include <library/components/entitymesh.hpp>
+#include <library/components/transform.hpp>
+#include <library/systems/camerasystem.hpp>
+#include <library/systems/transformsystem.hpp>
+#include <library/systems/entitymeshrenderer.hpp>
 #include <core/resourceid.hpp>
+#include <glm/detail/qualifier.hpp>
 #include <renderer/ishader.hpp>
 #include <core/engine.hpp>
 #include <renderer/imesh.hpp>
@@ -24,12 +32,6 @@ std::vector<float> vertices = {
 
 std::vector<unsigned int> indices = {
     0, 1, 2, 2, 3, 0
-};
-
-struct MeshComponent {
-    ResourceID<IShader>  shader;
-    ResourceID<ITexture> texture;
-    ResourceID<IMesh>    mesh;
 };
 
 int main() {
@@ -65,19 +67,23 @@ int main() {
 
     ResourceID<ITexture> textureID = engine.resourceManager.add<ITexture>(texture);
 
-    MeshComponent meshComp {shaderID, textureID, meshID};
-    
-    engine.world.entity("ent").set<MeshComponent>(meshComp);
+    Camera camera {.fov=75.0f};
+    Transform camTransform {.position=glm::vec3(0, 0, 1), .rotation=glm::quat(1, 0, 0, 0), .scale=glm::vec3(1, 1, 1)};
 
-    engine.world.system<MeshComponent>().each([](MeshComponent& c){
-        IShader* shader = Engine::getInstance()->resourceManager.get(c.shader);
-        ITexture* texture = Engine::getInstance()->resourceManager.get(c.texture);
-        IMesh* mesh = Engine::getInstance()->resourceManager.get(c.mesh);
+    EntityMesh entMesh {.shader=shaderID, .texture=textureID, .mesh=meshID};
+    Transform entTransform {.position=glm::vec3(0, 0, 0), .rotation=glm::quat(1, 0, 0, 0), .scale=glm::vec3(1, 1, 1)};
 
-        shader->use();
-        texture->bind(0);
-        mesh->draw();
-    });
+    auto ent = engine.world.entity("ent");
+    ent.set<EntityMesh>(entMesh);
+    ent.set<Transform>(entTransform);
+
+    auto cam = engine.world.entity("cam");
+    cam.set<Camera>(camera);
+    cam.set<Transform>(camTransform);
+
+    engine.world.system<Transform>().kind(Engine::PostUpdate).each(transformSystem);
+    engine.world.system<Camera, Transform>().kind(Engine::PostUpdate).each(cameraSystem);
+    engine.world.system<EntityMesh, Transform>().kind(Engine::Render).each(entityMeshRenderer);
 
     engine.run();
 

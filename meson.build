@@ -1,4 +1,4 @@
-project('singularity', ['c', 'cpp'], version: 'dev')
+project('singularity', ['c', 'cpp'], version: 'dev', default_options: ['warning_level=3', 'cpp_std=c++20'])
 
 srcs = [
     'src/main.cpp',
@@ -8,7 +8,12 @@ srcs = [
     'src/renderer/opengl/mesh.cpp',
     'src/renderer/opengl/texture.cpp',
     'src/loader/png.cpp',
-    'src/core/engine.cpp'
+    'src/core/engine.cpp',
+    'src/logger/logger.cpp',
+    
+    'src/library/systems/camerasystem.cpp',
+    'src/library/systems/entitymeshrenderer.cpp',
+    'src/library/systems/transformsystem.cpp'
 ]
 
 glad_inc = include_directories('glad/include')
@@ -28,11 +33,13 @@ endif
 flecs_proj = subproject('flecs')
 flecs_dep = flecs_proj.get_variable('flecs_dep')
 
+glm_dep = dependency('glm', required: true)
+
 cpp = meson.get_compiler('cpp')
 
 if host_machine.system() == 'windows'
     if cpp.get_id() != 'msvc'
-        error('Only MSVC is supported, use MSVC version that supports C++23 preview')
+        error('Only MSVC is supported!')
     endif
 
     configure_file(
@@ -52,10 +59,6 @@ if host_machine.system() == 'windows'
         output: 'z.dll',
         copy: true
     )
-
-    compiler_args = ['/std:c++latest']
-else
-    compiler_args = ['-std=c++23']
 endif
 
 executable(
@@ -64,5 +67,5 @@ executable(
     dependencies: [glfw_dep, spng_dep, flecs_dep,],
     link_with: [glad_lib],
     include_directories: [glad_inc, include_directories('src')],
-    cpp_args: compiler_args
+    override_options : ['cpp_std=c++20']
 )
