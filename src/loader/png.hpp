@@ -4,7 +4,7 @@
 #include <string>
 #include <util/types.hpp>
 
-namespace PNG {
+namespace singularity::PNG {
     Image* loadFromFile(const std::string& filename);
 }
 

@@ -4,6 +4,8 @@
 #include <iostream>
 #include <sstream>
 
+namespace singularity {
+
 using Manip = std::ostream& (*)(std::ostream&);
 
 class LogStream {
@@ -31,5 +33,7 @@ struct Log {
     static LogStream warn() { return LogStream("WARN"); }
     static LogStream error() { return LogStream("ERROR"); }
 };
+
+}
 
 #endif // SINGULARITY_LOGGER_HPP

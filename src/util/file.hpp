@@ -4,6 +4,8 @@
 #include <string>
 #include <fstream>
 
+namespace singularity {
+
 // Only for internal engine use! not safe!
 inline std::string readFile(const std::string& filename) {
     std::ifstream file(filename, std::ios::binary);
@@ -18,5 +20,7 @@ inline std::string readFile(const std::string& filename) {
 
     return contents;
 } 
+
+}
 
 #endif

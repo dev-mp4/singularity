@@ -2,18 +2,24 @@
 
 A simple and fast ECS 3D engine, written in С++
 
-## Building
+## Building SDK
 
-### Windows
+To make an application using Singularity, you need an SDK.
 
-Make sure that meson, ninja, MSVC and Windows SDK are installed  
-Compile project with meson, all required DLLs will be copied to executable in your build directory automatically.
+### Linux/UNIX
 
-### Linux or UNIX
-
-Works OOTB for now.  
-Compile project with meson, you'll find the executable in your build directory
+Make sure that `C++ compiler, python3, meson, ninja, patchelf` is installed.  
+Run `python3 gen_sdk.py <SDK output directory>`, full SDK will be available in specified directory.  
 
 ## Usage
 
-The engine is currently not ready for usage and is basically a program, not a library, but the work is going, watch for commits for the first release!
+Just put SDK into your project, add it as subdir and get `singularity_dep` variable, add it as a dependency to your executable.
+
+## What's next?
+
+Currently, I am writing a documentation and a beginner-friendly usage tutorial, but engine is already (technically) complete!  
+The only missing features are:
+ - Per-camera framebuffers
+ - Multipass rendering with post-processing
+ - Forward and deffered lighting
+ - Physics engine

@@ -4,6 +4,8 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
 
+namespace singularity {
+
 void transformSystem(Transform& transform) {
     glm::vec3 yzx = glm::eulerAngles(transform.rotation);
 
@@ -20,4 +22,6 @@ void transformSystem(Transform& transform) {
     transform.model *= rotMatrix;
 
     transform.model = glm::scale(transform.model, transform.scale);
+}
+
 }

@@ -3,10 +3,14 @@
 
 #include <vector>
 
+namespace singularity {
+
 struct Image {
     int width;
     int height;
     std::vector<unsigned char> data;
 };
+
+}
 
 #endif // SINGULARITY_TYPES_HPP

@@ -6,10 +6,14 @@
 #include <renderer/itexture.hpp>
 #include <renderer/imesh.hpp>
 
+namespace singularity {
+
 struct EntityMesh {
-    ResourceID<IShader>  shader;
-    ResourceID<ITexture> texture;
-    ResourceID<IMesh>    mesh;
+    ResourceID<IShader>  shader = ResourceID<IShader>{0};
+    ResourceID<ITexture> texture = ResourceID<ITexture>{0};
+    ResourceID<IMesh>    mesh = ResourceID<IMesh>{0};
 };
+
+}
 
 #endif // SINGULARITY_ENTITYMESH_HPP

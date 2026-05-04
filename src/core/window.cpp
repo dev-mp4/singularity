@@ -2,6 +2,8 @@
 
 #include <GLFW/glfw3.h>
 
+namespace singularity {
+
 Window::Window() : window(nullptr) {}
 
 Window::~Window() {}
@@ -51,4 +53,22 @@ double Window::getTime() {
 
 void Window::destroy() {
     glfwTerminate();
+}
+
+void Window::setKeyCallback(KeyCallbackFn callback) {
+    glfwSetKeyCallback(window, (GLFWkeyfun)callback);
+}
+
+void Window::setMouseCallback(MouseCallbackFn callback) {
+    glfwSetMouseButtonCallback(window, (GLFWmousebuttonfun)callback);
+}
+
+void Window::setMousePosCallback(CursorPosCallbackFn callback) {
+    glfwSetCursorPosCallback(window, (GLFWcursorposfun)callback);
+}
+
+void Window::setCursorState(bool state) {
+    glfwSetInputMode(window, GLFW_CURSOR, state ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
+}
+
 }

@@ -4,6 +4,8 @@
 #include <string>
 #include <renderer/ishader.hpp>
 
+namespace singularity {
+
 class Shader : public IShader {
 public:
     Shader(unsigned int id);
@@ -17,5 +19,7 @@ public:
 private:
     unsigned int id;
 };
+
+}
 
 #endif //SINGULARITY_SHADER_HPP

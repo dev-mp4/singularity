@@ -1,9 +1,12 @@
 #ifndef SINGULARITY_ENGINE_HPP
 #define SINGULARITY_ENGINE_HPP
 
+#include "core/input.hpp"
 #include <core/window.hpp>
 #include <core/resourcemanager.hpp>
 #include <flecs.h>
+
+namespace singularity {
 
 enum class RendererKind {
     OPENGL_CORE
@@ -21,6 +24,7 @@ public:
     ResourceManager resourceManager;
 
     Window window;
+    Input input;
 
     bool init(RendererKind rendererKind, const std::string& title, int width, int height, bool fullscreen);
     void destroy();
@@ -50,5 +54,7 @@ private:
 
     float lastTime;
 };
+
+}
 
 #endif // SINGULARITY_ENGINE_HPP

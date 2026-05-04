@@ -4,6 +4,8 @@
 #include <vector>
 #include <renderer/imesh.hpp>
 
+namespace singularity {
+
 class Mesh : public IMesh {
 public:
     Mesh(unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int indicesCount);
@@ -16,5 +18,7 @@ public:
 private:
     unsigned int vao, vbo, ebo, indicesCount;
 };
+
+}
 
 #endif //SINGULARITY_MESH_HPP

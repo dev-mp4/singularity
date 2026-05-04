@@ -3,6 +3,8 @@
 #include <logger/logger.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+namespace singularity {
+
 Shader::Shader(unsigned int id) : id(id) {}
 Shader::~Shader() {}
 
@@ -69,8 +71,10 @@ void Shader::destroy() {
 void Shader::setUniform(const std::string& name, glm::mat4& matrix) {
     GLint loc = glGetUniformLocation(id, name.c_str());
     if (loc == -1) {
-        Log::error() << "setUniform " << name << " not found!";
+        Log::error() << "Uniform " << name << " not found!";
         return;
     }
     glUniformMatrix4fv(loc, 1, false, glm::value_ptr(matrix));
+}
+
 }

@@ -4,6 +4,8 @@
 #include <fstream>
 #include <logger/logger.hpp>
 
+namespace singularity {
+
 Image* PNG::loadFromFile(const std::string& filename) {
     std::ifstream file(filename, std::ios::binary | std::ios::ate);
     if (!file) {
@@ -61,4 +63,6 @@ Image* PNG::loadFromFile(const std::string& filename) {
     }
 
     return new Image {width, height, std::move(pixels)};
+}
+
 }

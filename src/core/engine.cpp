@@ -1,9 +1,10 @@
 #include "engine.hpp"
-#include "flecs/addons/cpp/c_types.hpp"
 #include <logger/logger.hpp>
 #include <GLFW/glfw3.h>
 #include <renderer/opengl/opengl.hpp>
 #include <util/consts.hpp>
+
+namespace singularity {
 
 Engine* Engine::instance;
 flecs::entity Engine::Update;
@@ -31,6 +32,7 @@ bool Engine::init(RendererKind rendererKind, const std::string& title, int width
     this->rendererKind = rendererKind;
 
     if (!window.init(title, width, height, fullscreen)) return false;
+    input.init(window);
 
     switch (rendererKind) {
         case RendererKind::OPENGL_CORE:
@@ -42,7 +44,6 @@ bool Engine::init(RendererKind rendererKind, const std::string& title, int width
     Log::info() << "Window title: " << title;
 
     world.reset();
-
 
     Update = world.entity("Update").add(flecs::Phase);
     PostUpdate = world.entity("PostUpdate").add(flecs::Phase).depends_on(Update);
@@ -71,7 +72,7 @@ void Engine::clear(float r, float g, float b) {
 }
 
 void Engine::update() {
-    glfwPollEvents();
+    input.poll();
 
     running = !window.shouldClose() && !world.should_quit();
 
@@ -89,9 +90,13 @@ void Engine::update() {
 void Engine::run() {
     Log::info() << "Starting main loop";
 
+    running = true;
+
     while (running) {
         update();
     }
 
     world.quit();
+}
+
 }

@@ -2,6 +2,8 @@
 #include <ctime>
 #include <iomanip>
 
+namespace singularity {
+
 LogStream::LogStream(const char* level) : level(level) {}
 LogStream::~LogStream() {
     // flush on destruction
@@ -22,4 +24,6 @@ std::string LogStream::currentTime() {
     std::ostringstream ss;
     ss << std::put_time(&tm, "%H:%M:%S");
     return ss.str();
+}
+
 }

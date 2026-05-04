@@ -9,6 +9,8 @@
 #include <core/resourceid.hpp>
 #include <core/resourcepool.hpp>
 
+namespace singularity {
+
 class ResourceManager {
 public:
     ResourceManager() {}
@@ -25,7 +27,7 @@ public:
 
     template<typename T>
     void registerResource() {
-        if (!pools.contains(typeid(T))) {
+        if (pools.find(typeid(T)) == pools.end()) {
             pools[typeid(T)] = new ResourcePool<T>();
         }
     }
@@ -66,7 +68,7 @@ private:
 
     template<typename T>
     ResourcePool<T>* get_pool() {
-        if (pools.contains(typeid(T))) return static_cast<ResourcePool<T>*>(pools[typeid(T)]);
+        if (pools.find(typeid(T)) != pools.end()) return static_cast<ResourcePool<T>*>(pools[typeid(T)]);
         return nullptr;
     }
 
@@ -87,5 +89,7 @@ private:
         if (isValid(id)) free.push_back(id);
     }
 };
+
+}
 
 #endif // SINGULARITY_RESOURCEMANAGER_HPP

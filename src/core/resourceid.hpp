@@ -3,6 +3,8 @@
 
 #include <functional>
 
+namespace singularity {
+
 template<typename T>
 class ResourceID {
 public:
@@ -11,10 +13,12 @@ public:
     bool operator==(const ResourceID& other) const { return other.id == id; }
 };
 
+}
+
 namespace std {
     template<typename T>
-    struct hash<ResourceID<T>> {
-        std::size_t operator()(const ResourceID<T>& rid) const noexcept {
+    struct hash<singularity::ResourceID<T>> {
+        std::size_t operator()(const singularity::ResourceID<T>& rid) const noexcept {
             // use id as a hash
             return std::hash<std::size_t>{}(rid.id);
         }

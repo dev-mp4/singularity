@@ -5,6 +5,8 @@
 #include <unordered_map>
 #include <memory>
 
+namespace singularity {
+
 struct IResourcePool {
 public:
     virtual ~IResourcePool() = default;
@@ -20,7 +22,7 @@ public:
     std::unordered_map<ResourceID<T>, std::unique_ptr<T>> pool;
     
     T* get(ResourceID<T> id) {
-        if (pool.contains(id)) return pool[id].get();
+        if (pool.find(id) != pool.end()) return pool[id].get();
         return nullptr;
     }
 
@@ -42,5 +44,7 @@ public:
         pool.clear();
     }
 };
+
+}
 
 #endif // SINGULARITY_RESOURCEPOOL_HPP

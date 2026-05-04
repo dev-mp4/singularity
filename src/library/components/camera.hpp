@@ -3,11 +3,15 @@
 
 #include <glm/glm.hpp>
 
+namespace singularity {
+
 struct Camera {
-    float fov;
+    float fov = 60.0f;
 
     glm::mat4 projection;
     glm::mat4 view;
 };
+
+}
 
 #endif // SINGULARITY_CAMERA_HPP

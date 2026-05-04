@@ -4,6 +4,8 @@
 #include <glm/glm.hpp>
 #include <string>
 
+namespace singularity {
+
 class IShader {
 public:
     virtual ~IShader() = default;
@@ -12,5 +14,7 @@ public:
     virtual void destroy() = 0;
     virtual void setUniform(const std::string& name, glm::mat4& matrix) = 0;
 };
+
+}
 
 #endif // SINGULARITY_ISHADER_HPP

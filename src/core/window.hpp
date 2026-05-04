@@ -4,6 +4,12 @@
 
 class GLFWwindow;
 
+namespace singularity {
+
+typedef void (*KeyCallbackFn)(GLFWwindow*, int, int, int, int);
+typedef void (*MouseCallbackFn)(GLFWwindow*, int, int, int);
+typedef void (*CursorPosCallbackFn)(GLFWwindow*, double, double);
+
 class Window {
 public:
     Window();
@@ -21,6 +27,12 @@ public:
 
     void destroy();
 
+    void setKeyCallback(KeyCallbackFn callback);
+    void setMouseCallback(MouseCallbackFn callback);
+    void setMousePosCallback(CursorPosCallbackFn callback);
+
+    void setCursorState(bool state);
+
 private:
     GLFWwindow* window;
 
@@ -29,5 +41,6 @@ private:
     bool fullscreen;
 };
 
+}
 
 #endif //SINGULARITY_WINDOW_HPP

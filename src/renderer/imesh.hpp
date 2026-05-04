@@ -1,6 +1,8 @@
 #ifndef SINGULARITY_IMESH_HPP
 #define SINGULARITY_IMESH_HPP
 
+namespace singularity {
+
 class IMesh {
 public:
     virtual ~IMesh() = default;
@@ -8,5 +10,7 @@ public:
     virtual void draw() = 0;
     virtual void destroy() = 0;  
 };
+
+}
 
 #endif // SINGULARITY_IMESH_HPP

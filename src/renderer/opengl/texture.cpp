@@ -1,6 +1,8 @@
 #include "texture.hpp"
 #include <glad/glad.h>
 
+namespace singularity {
+
 Texture::Texture(unsigned int id) : id(id) {}
 Texture::~Texture() {}
 
@@ -33,4 +35,6 @@ Texture* Texture::loadFromImage(Image* image) {
     glBindTexture(GL_TEXTURE_2D, 0);
 
     return new Texture(texture);
+}
+
 }

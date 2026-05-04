@@ -1,0 +1,12 @@
+sdk_root = meson.current_source_dir()
+
+engine_inc = include_directories('include')
+
+cpp = meson.get_compiler('cpp')
+engine_lib = cpp.find_library('singularity', dirs: sdk_root / 'lib')
+flecs_lib = cpp.find_library('flecs', dirs: sdk_root / 'lib')
+
+singularity_dep = declare_dependency(
+    include_directories: engine_inc,
+    dependencies: [engine_lib, flecs_lib]
+)

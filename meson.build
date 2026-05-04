@@ -1,7 +1,6 @@
-project('singularity', ['c', 'cpp'], version: 'dev', default_options: ['warning_level=3', 'cpp_std=c++20'])
+project('singularity', ['c', 'cpp'], license: 'lgpl', version: '1.0-dev', default_options: ['warning_level=3'])
 
 srcs = [
-    'src/main.cpp',
     'src/core/window.cpp',
     'src/renderer/opengl/opengl.cpp',
     'src/renderer/opengl/shader.cpp',
@@ -10,10 +9,12 @@ srcs = [
     'src/loader/png.cpp',
     'src/core/engine.cpp',
     'src/logger/logger.cpp',
+    'src/core/input.cpp',
     
     'src/library/systems/camerasystem.cpp',
     'src/library/systems/entitymeshrenderer.cpp',
-    'src/library/systems/transformsystem.cpp'
+    'src/library/systems/transformsystem.cpp',
+    'src/library/register.cpp'
 ]
 
 glad_inc = include_directories('glad/include')
@@ -37,35 +38,11 @@ glm_dep = dependency('glm', required: true)
 
 cpp = meson.get_compiler('cpp')
 
-if host_machine.system() == 'windows'
-    if cpp.get_id() != 'msvc'
-        error('Only MSVC is supported!')
-    endif
-
-    configure_file(
-        input: join_paths(meson.current_build_dir(), 'subprojects', 'glfw-3.4', 'glfw3-3.dll'),
-        output: 'glfw3-3.dll',
-        copy: true
-    )
-
-    configure_file(
-        input: join_paths(meson.current_build_dir(), 'subprojects', 'libspng-0.7.4', 'spng-0.dll'),
-        output: 'spng-0.dll',
-        copy: true
-    )
-
-    configure_file(
-        input: join_paths(meson.current_build_dir(), 'subprojects', 'zlib-1.2.13', 'z.dll'),
-        output: 'z.dll',
-        copy: true
-    )
-endif
-
-executable(
+singularity = shared_library(
     'singularity',
     srcs,
     dependencies: [glfw_dep, spng_dep, flecs_dep,],
     link_with: [glad_lib],
     include_directories: [glad_inc, include_directories('src')],
-    override_options : ['cpp_std=c++20']
+    install: true
 )

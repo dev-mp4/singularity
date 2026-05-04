@@ -4,6 +4,8 @@
 #include <util/types.hpp>
 #include <renderer/itexture.hpp>
 
+namespace singularity {
+
 class Texture : public ITexture {
 public:
     Texture(unsigned int id);
@@ -16,5 +18,7 @@ public:
 private:
     unsigned int id;
 };
+
+}
 
 #endif // SINGULARITY_TEXTURE_HPP

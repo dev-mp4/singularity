@@ -6,6 +6,8 @@
 #include <core/engine.hpp>
 #include <library/components/camera.hpp>
 
+namespace singularity {
+
 void entityMeshRenderer(EntityMesh& mesh, Transform& transform) {
     IShader* shader = Engine::getInstance()->resourceManager.get(mesh.shader);
     ITexture* texture = Engine::getInstance()->resourceManager.get(mesh.texture);
@@ -26,4 +28,6 @@ void entityMeshRenderer(EntityMesh& mesh, Transform& transform) {
 
         _mesh->draw();
     });
+}
+
 }

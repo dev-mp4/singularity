@@ -2,6 +2,8 @@
 #include <glad/glad.h>
 #include <numeric>
 
+namespace singularity {
+
 Mesh::Mesh(unsigned int vao, unsigned int vbo, unsigned int ebo, unsigned int indicesCount) :
     vao(vao), vbo(vbo), ebo(ebo), indicesCount(indicesCount) {}
 
@@ -49,4 +51,6 @@ Mesh* Mesh::create(const std::vector<float>& vertices, const std::vector<unsigne
     glBindVertexArray(0);
 
     return new Mesh(vao, vbo, ebo, indicesCount);
+}
+
 }
