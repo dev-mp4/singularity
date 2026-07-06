@@ -1,74 +1,37 @@
 #include "window.hpp"
-
-#include <GLFW/glfw3.h>
+#include <SDL3/SDL.h>
+#include <logger/logger.hpp>
 
 namespace singularity {
 
-Window::Window() : window(nullptr) {}
-
+Window::Window(const std::string& title, unsigned int width, unsigned int height) : title(title), width(width), height(height), window(nullptr), renderer(nullptr) {}
 Window::~Window() {}
 
-bool Window::init(const std::string& title, int width, int height, bool fullscreen) {
-    glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-
-    window = glfwCreateWindow(width, height, title.c_str(), fullscreen ? glfwGetPrimaryMonitor() : nullptr, nullptr);
-    if (window == nullptr) {
+bool Window::init() {
+    if (!SDL_Init(SDL_INIT_VIDEO)) {
+        Log::error() << "SDL init error: " << SDL_GetError();
         return false;
     }
 
-    this->width = width;
-    this->height = height;
+    if (!SDL_CreateWindowAndRenderer(title.c_str(), width, height, 0, &window, &renderer)) {
+        Log::error() << "SDL window/renderer creation error: " << SDL_GetError();
+        SDL_Quit();
+        return false;
+    }
 
-    glfwMakeContextCurrent(window);
     return true;
 }
 
-void Window::update() {
-    glfwSwapBuffers(window);
-}
-
-bool Window::shouldClose() {
-    return glfwWindowShouldClose(window);
-}
-
-void* Window::getGLProcLoader() {
-    return (void*) glfwGetProcAddress;
-}
-
-int Window::getWidth() {
-    return width;
-}
-
-int Window::getHeight() {
-    return height;
-}
-
-double Window::getTime() {
-    return glfwGetTime();
-}
-
 void Window::destroy() {
-    glfwTerminate();
+    if (window && renderer) {
+        SDL_DestroyRenderer(renderer);
+        SDL_DestroyWindow(window);
+    }
+    SDL_Quit();
 }
 
-void Window::setKeyCallback(KeyCallbackFn callback) {
-    glfwSetKeyCallback(window, (GLFWkeyfun)callback);
-}
-
-void Window::setMouseCallback(MouseCallbackFn callback) {
-    glfwSetMouseButtonCallback(window, (GLFWmousebuttonfun)callback);
-}
-
-void Window::setMousePosCallback(CursorPosCallbackFn callback) {
-    glfwSetCursorPosCallback(window, (GLFWcursorposfun)callback);
-}
-
-void Window::setCursorState(bool state) {
-    glfwSetInputMode(window, GLFW_CURSOR, state ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
+void Window::update() {
+    SDL_RenderPresent(renderer);
 }
 
 }

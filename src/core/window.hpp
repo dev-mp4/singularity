@@ -1,46 +1,29 @@
 #ifndef SINGULARITY_WINDOW_HPP
 #define SINGULARITY_WINDOW_HPP
-#include <string>
 
-class GLFWwindow;
+#include <string>
+#include <SDL3/SDL.h>
 
 namespace singularity {
 
-typedef void (*KeyCallbackFn)(GLFWwindow*, int, int, int, int);
-typedef void (*MouseCallbackFn)(GLFWwindow*, int, int, int);
-typedef void (*CursorPosCallbackFn)(GLFWwindow*, double, double);
-
 class Window {
 public:
-    Window();
+    Window(const std::string& title, unsigned int width, unsigned int height);
     ~Window();
 
-    bool init(const std::string& title, int width, int height, bool fullscreen);
-    void update();
-    static void* getGLProcLoader();
-    bool shouldClose();
-
-    int getWidth();
-    int getHeight();
-
-    static double getTime();
-
+    bool init();
     void destroy();
 
-    void setKeyCallback(KeyCallbackFn callback);
-    void setMouseCallback(MouseCallbackFn callback);
-    void setMousePosCallback(CursorPosCallbackFn callback);
-
-    void setCursorState(bool state);
+    void update();
 
 private:
-    GLFWwindow* window;
-
     std::string title;
-    int width, height;
-    bool fullscreen;
+    unsigned int width, height;
+
+    SDL_Window* window;
+    SDL_Renderer* renderer;
 };
 
 }
 
-#endif //SINGULARITY_WINDOW_HPP
+#endif
