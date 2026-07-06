@@ -12,7 +12,9 @@ Run `cmake --build build` to compile dependencies and project.
 
 ### Windows
 
-Currently, I tested engine with MSVC only
+Currently, I tested engine with MSVC only, install MSVC(or simply Visual Studio with MSVC enabled) and CMake.  
+Run `cmake -S . -B build` to bootstrap project and download dependencies.  
+Run `cmake --build build` to compile dependencies and project.
 
 ## Usage
 
