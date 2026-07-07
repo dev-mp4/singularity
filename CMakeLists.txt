@@ -10,6 +10,8 @@ set(SDL_EXAMPLES OFF CACHE INTERNAL "")
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS OFF)
 
+set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
+
 include(FetchContent)
 
 FetchContent_Declare(
@@ -25,10 +27,16 @@ add_library(glad
 )
 target_include_directories(glad PUBLIC glad/include)
 
+set_target_properties(glad PROPERTIES
+    MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL"
+)
+
 add_executable(singularity
     src/main.cpp
     src/core/window.cpp
     src/logger/logger.cpp
+    src/render/renderer.cpp
+    src/render/opengl/glrenderer.cpp
 )
 
 target_link_libraries(singularity PUBLIC glad)

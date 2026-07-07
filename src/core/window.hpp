@@ -3,12 +3,13 @@
 
 #include <string>
 #include <SDL3/SDL.h>
+#include <util/types.hpp>
 
 namespace singularity {
 
 class Window {
 public:
-    Window(const std::string& title, unsigned int width, unsigned int height);
+    Window(const std::string& title, unsigned int width, unsigned int height, RendererType rendererType);
     ~Window();
 
     bool init();
@@ -16,12 +17,14 @@ public:
 
     void update();
 
+    static void* getGLProcLoader();
+
 private:
     std::string title;
     unsigned int width, height;
+    RendererType rendererType;
 
     SDL_Window* window;
-    SDL_Renderer* renderer;
 };
 
 }

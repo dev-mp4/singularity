@@ -11,6 +11,10 @@ struct Image {
     std::vector<unsigned char> data;
 };
 
+enum class RendererType {
+    OpenGL
+};
+
 }
 
 #endif // SINGULARITY_TYPES_HPP
