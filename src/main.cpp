@@ -1,12 +1,19 @@
+#include "core/input.hpp"
+#include "core/keycode.hpp"
 #include "util/types.hpp"
+#include "window/windowevent.hpp"
 #include <SDL3/SDL.h>
-#include <core/window.hpp>
+#include <window/window.hpp>
 #include <util/types.hpp>
 #include <render/renderer.hpp>
 
 int main() {
     singularity::Window win("Singularity", 1280, 720, singularity::RendererType::OpenGL);
     if (!win.init()) {
+        return 1;
+    }
+    singularity::Input input(win);
+    if (!input.init()) {
         return 1;
     }
 
@@ -16,15 +23,16 @@ int main() {
     }
 
     bool running = true;
-    SDL_Event event;
+    singularity::WindowEvent event;
     while (running) {
-        while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_EVENT_QUIT) running = false;
+        input.update();
 
-            rend.clear(1, 0, 0);
+        if (input.isShouldClose()) running = false;
+        if (input.getKeyDown(singularity::KeyCode::Escape)) running = false;
+        
+        rend.clear(1, 0, 0);
 
-            win.update();
-        }
+        win.update();
     }
 
     win.destroy();

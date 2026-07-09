@@ -1,6 +1,6 @@
 #include "glrenderer.hpp"
 #include <logger/logger.hpp>
-#include <core/window.hpp>
+#include <window/window.hpp>
 #include <glad/glad.h>
 
 namespace singularity {

@@ -33,10 +33,12 @@ set_target_properties(glad PROPERTIES
 
 add_executable(singularity
     src/main.cpp
-    src/core/window.cpp
     src/logger/logger.cpp
     src/render/renderer.cpp
     src/render/opengl/glrenderer.cpp
+    src/window/window.cpp
+    src/window/windowevent.cpp
+    src/core/input.cpp
 )
 
 target_link_libraries(singularity PUBLIC glad)
