@@ -36,6 +36,8 @@ add_executable(singularity
     src/logger/logger.cpp
     src/render/renderer.cpp
     src/render/opengl/glrenderer.cpp
+    src/render/opengl/glshader.cpp
+    src/render/opengl/glmesh.cpp
     src/window/window.cpp
     src/window/windowevent.cpp
     src/core/input.cpp

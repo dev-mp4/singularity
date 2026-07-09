@@ -1,8 +1,11 @@
 #ifndef SINGULARITY_RENDERER_HPP
 #define SINGULARITY_RENDERER_HPP
 
+#include <render/imesh.hpp>
 #include <util/types.hpp>
+#include <render/features.hpp>
 #include <render/irenderer.hpp>
+#include <render/ishader.hpp>
 
 namespace singularity {
 
@@ -14,11 +17,17 @@ public:
     bool init();
     void destroy();
     void clear(float r, float g, float b);
+    RendererFeatures getFeatures();
+
+    IShader* compileShader(const std::string& vertex, const std::string& fragment);
+    IMesh* createMesh(const std::vector<float>& vertices, const std::vector<unsigned int>& indices, const std::vector<unsigned short>& attributes);
 
 private:
     RendererType type;
 
     IRenderer* renderer;
+
+    RendererFeatures features;
 
     bool initGL();
 };

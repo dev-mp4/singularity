@@ -1,0 +1,24 @@
+#ifndef SINGULARITY_GLSHADER_HPP
+#define SINGULARITY_GLSHADER_HPP
+
+#include <render/ishader.hpp>
+
+namespace singularity {
+
+class GLShader : public IShader {
+public:
+    GLShader();
+    ~GLShader() override;
+
+    bool compileGLSL(const std::string& vertex, const std::string& fragment) override;
+
+    void use() override;
+    void destroy() override;
+
+private:
+    unsigned int id;
+};
+
+}
+
+#endif
