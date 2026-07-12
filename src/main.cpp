@@ -1,14 +1,11 @@
-#include "core/input.hpp"
-#include "core/keycode.hpp"
 #include "render/imesh.hpp"
 #include "render/ishader.hpp"
-#include "util/file.hpp"
-#include "util/types.hpp"
-#include "window/windowevent.hpp"
 #include <SDL3/SDL.h>
 #include <window/window.hpp>
 #include <util/types.hpp>
 #include <render/renderer.hpp>
+#include <core/engine.hpp>
+#include <util/file.hpp>
 
 std::vector<float> vertices = {
     -0.5f, -0.5f, 0.0f,
@@ -21,50 +18,25 @@ std::vector<unsigned int> indices = {
 };
 
 int main() {
-    singularity::Window win("Singularity", 1280, 720, singularity::RendererType::OpenGL);
-    if (!win.init()) {
-        return 1;
-    }
-    singularity::Input input(win);
-    if (!input.init()) {
-        return 1;
-    }
+    singularity::Engine engine("Singularity", 1280, 720, singularity::RendererType::OpenGL);
+    if (!engine.init()) return 1;
 
-    singularity::Renderer rend(singularity::RendererType::OpenGL);
-    if (!rend.init()) {
-        return 1;
-    }
-
-    singularity::IShader* shader = rend.compileShader(singularity::readFile("res/shader.vsh"), singularity::readFile("res/shader.fsh"));
+    singularity::IShader* shader = engine.getRenderer().compileShader(singularity::readFile("res/shader.vsh"), singularity::readFile("res/shader.fsh"));
     if (!shader) {
         return 1;
     }
 
-    singularity::IMesh* mesh = rend.createMesh(vertices, indices, {3});
+    singularity::IMesh* mesh = engine.getRenderer().createMesh(vertices, indices, {3});
     if (!mesh) {
         return 1;
     }
 
-    bool running = true;
-    singularity::WindowEvent event;
-    while (running) {
-        input.update();
-
-        if (input.isShouldClose()) running = false;
-        if (input.getKeyDown(singularity::KeyCode::Escape)) running = false;
-
-        rend.clear(0, 0, 0);
-
-        shader->use();
-        mesh->draw();
-
-        win.update();
-    }
+    engine.run();
 
     shader->destroy();
     mesh->destroy();
 
-    win.destroy();
+    engine.destroy();
 
     return 0;
 }
