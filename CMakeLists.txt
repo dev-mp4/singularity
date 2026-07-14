@@ -42,6 +42,8 @@ add_executable(singularity
     src/window/windowevent.cpp
     src/core/input.cpp
     src/core/engine.cpp
+    src/core/gameobject.cpp
+    src/core/scene.cpp
 )
 
 target_link_libraries(singularity PUBLIC glad)

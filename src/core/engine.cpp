@@ -32,6 +32,8 @@ bool Engine::init() {
 }
 
 void Engine::destroy() {
+    scene.destroy();
+
     renderer.destroy();
     input.destroy();
     window.destroy();
@@ -55,12 +57,18 @@ Renderer& Engine::getRenderer() {
     return renderer;
 }
 
+Scene& Engine::getScene() {
+    return scene;
+}
+
 void Engine::update() {
     input.update();
 
     if (input.isShouldClose()) isRunning = false;
 
     renderer.clear(0, 0, 0);
+
+    scene.update();
 
     window.update();
 }

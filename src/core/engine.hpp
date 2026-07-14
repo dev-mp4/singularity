@@ -5,6 +5,7 @@
 #include <core/input.hpp>
 #include <util/types.hpp>
 #include <render/renderer.hpp>
+#include <core/scene.hpp>
 #include <string>
 
 namespace singularity {
@@ -23,6 +24,7 @@ public:
     Input& getInput();
     Window& getWindow();
     Renderer& getRenderer();
+    Scene& getScene();
 
     void update();
     void run();
@@ -36,6 +38,8 @@ private:
     Input input;
 
     Renderer renderer;
+
+    Scene scene;
 };
 
 }
