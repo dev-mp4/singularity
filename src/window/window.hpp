@@ -21,6 +21,7 @@ public:
     bool pollEvent(WindowEvent& event);
 
     static void* getGLProcLoader();
+    static double getTime();
 
 private:
     std::string title;

@@ -15,6 +15,8 @@ public:
     void use() override;
     void destroy() override;
 
+    void setMat4(const std::string& name, const glm::mat4& matrix) override;
+
 private:
     unsigned int id;
 };

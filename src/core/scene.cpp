@@ -31,6 +31,11 @@ void Scene::addGameObject(GameObject&& obj) {
 }
 
 GameObject* Scene::getGameObject(const std::string& name) {
+    Log::info() << scene.size();
+    for (auto& [k, v] : scene) {
+        Log::info() << k;
+    }
+
     auto it = scene.find(name);
     if (it != scene.end())
         return &(it->second);

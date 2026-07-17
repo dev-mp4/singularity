@@ -1,6 +1,7 @@
 #include "glshader.hpp"
 #include <glad/glad.h>
 #include <logger/logger.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace singularity {
 
@@ -66,6 +67,18 @@ void GLShader::use() {
 
 void GLShader::destroy() {
     if (id) glDeleteProgram(id);
+}
+
+void GLShader::setMat4(const std::string& name, const glm::mat4& matrix) {
+    if (!id) return;
+    
+    GLint loc = glGetUniformLocation(id, name.c_str());
+    if (loc < 0) {
+        Log::error() << "Uniform " << name << " is not found!";
+        return;
+    }
+
+    glUniformMatrix4fv(loc, 1, false, glm::value_ptr(matrix));
 }
 
 }

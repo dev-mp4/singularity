@@ -1,6 +1,7 @@
 #ifndef SINGULARITY_ISHADER_HPP
 #define SINGULARITY_ISHADER_HPP
 
+#include <glm/glm.hpp>
 #include <string>
 
 namespace singularity {
@@ -13,6 +14,7 @@ public:
 
     virtual void use() = 0;
     virtual void destroy() = 0;
+    virtual void setMat4(const std::string& name, const glm::mat4& matrix) = 0;
 };
 
 }

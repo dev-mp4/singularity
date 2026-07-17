@@ -1,7 +1,7 @@
 #ifndef SINGULARITY_SCENE_HPP
 #define SINGULARITY_SCENE_HPP
 
-#include <string_view>
+#include <string>
 #include <unordered_map>
 #include <core/gameobject.hpp>
 
@@ -21,7 +21,7 @@ public:
     bool hasGameObject(const std::string& name);
 
 private:
-    std::unordered_map<std::string_view, GameObject> scene;
+    std::unordered_map<std::string, GameObject> scene;
 };
 
 }

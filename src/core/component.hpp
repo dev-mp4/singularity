@@ -1,12 +1,14 @@
 #ifndef SINGULARITY_COMPONENT_HPP
 #define SINGULARITY_COMPONENT_HPP
 
+#include <string>
+
 namespace singularity {
 
 class GameObject;
 
 #define COMPONENT(name) \
-    static constexpr std::string_view _getName() { return #name; }
+public: static constexpr std::string_view _getName() { return #name; }
 
 class Component {
 public:

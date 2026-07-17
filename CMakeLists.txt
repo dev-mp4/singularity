@@ -19,8 +19,14 @@ FetchContent_Declare(
     GIT_REPOSITORY https://github.com/libsdl-org/SDL.git
     GIT_TAG        release-3.4.12
 )
+FetchContent_Declare(
+    glm
+    GIT_REPOSITORY https://github.com/g-truc/glm.git
+    GIT_TAG        1.0.3
+)
 
 FetchContent_MakeAvailable(SDL3)
+FetchContent_MakeAvailable(glm)
 
 add_library(glad
     glad/src/glad.c
@@ -44,10 +50,15 @@ add_executable(singularity
     src/core/engine.cpp
     src/core/gameobject.cpp
     src/core/scene.cpp
+    src/core/graphics/mesh.cpp
+    src/core/graphics/shader.cpp
+    src/core/components/transform.cpp
+    src/core/time.cpp
 )
 
 target_link_libraries(singularity PUBLIC glad)
 target_link_libraries(singularity PUBLIC SDL3::SDL3)
+target_link_libraries(singularity PUBLIC glm::glm)
 
 target_include_directories(singularity PUBLIC src)
 

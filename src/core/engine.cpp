@@ -3,6 +3,7 @@
 #include <util/types.hpp>
 #include <util/consts.hpp>
 #include <logger/logger.hpp>
+#include <core/time.hpp>
 
 namespace singularity {
 
@@ -62,6 +63,10 @@ Scene& Engine::getScene() {
 }
 
 void Engine::update() {
+    Time::time = Window::getTime();
+    Time::deltaTime = Time::time - Time::_lastTime;
+    Time::_lastTime = Time::time;
+
     input.update();
 
     if (input.isShouldClose()) isRunning = false;

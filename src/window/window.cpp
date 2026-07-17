@@ -106,4 +106,9 @@ bool Window::pollEvent(WindowEvent& event) {
     return false;
 }
 
+double Window::getTime() {
+    Uint64 ms = SDL_GetTicks();
+    return ms / 1000.0;
+}
+
 }
