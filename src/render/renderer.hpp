@@ -19,6 +19,8 @@ public:
     void clear(float r, float g, float b);
     RendererFeatures getFeatures();
 
+    RendererType getType();
+
     IShader* compileShader(const std::string& vertex, const std::string& fragment);
     IMesh* createMesh(const std::vector<float>& vertices, const std::vector<unsigned int>& indices, const std::vector<unsigned short>& attributes);
 

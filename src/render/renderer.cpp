@@ -1,4 +1,5 @@
 #include "renderer.hpp"
+#include "render/renderer.hpp"
 #include <render/imesh.hpp>
 #include <util/types.hpp>
 #include <render/features.hpp>
@@ -34,6 +35,10 @@ bool Renderer::initGL() {
 
 RendererFeatures Renderer::getFeatures() {
     return features;
+}
+
+RendererType Renderer::getType() {
+    return type;
 }
 
 IShader* Renderer::compileShader(const std::string& vertex, const std::string& fragment) {

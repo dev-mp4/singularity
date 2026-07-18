@@ -17,6 +17,7 @@ public:
     void destroy();
 
     void setMat4(const std::string& name, const glm::mat4& matrix);
+    void setFloat(const std::string& name, float value);
 
 private:
     std::string vertex;

@@ -19,7 +19,14 @@ LogStream& LogStream::operator<<(Manip manip) {
 
 std::string LogStream::currentTime() {
     std::time_t t = std::time(nullptr);
-    std::tm tm = *std::localtime(&t);
+
+    std::tm tm{};
+
+#ifdef _WIN32
+    localtime_s(&tm, &t);
+#else
+    localtime_r(&t, &tm);
+#endif
 
     std::ostringstream ss;
     ss << std::put_time(&tm, "%H:%M:%S");

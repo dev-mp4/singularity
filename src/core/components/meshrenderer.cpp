@@ -9,13 +9,13 @@ void MeshRenderer::onStart() {
 }
 
 void MeshRenderer::onDestroy() {
-    if (shader) shader->destroy();
+    if (material) material->destroy();
     if (mesh) mesh->destroy();
 }
 
 void MeshRenderer::onFrame() {
-    if (!shader || !mesh) {
-        Log::error() << "No shader or mesh specified in mesh renderer!";
+    if (!material || !mesh) {
+        Log::error() << "No material or mesh specified in mesh renderer!";
         return;
     }
 
@@ -24,8 +24,8 @@ void MeshRenderer::onFrame() {
         return;
     }
 
-    shader->use();
-    shader->setMat4("vModelMatrix", transform->getMatrix());
+    material->setMat4("vModelMatrix", transform->getMatrix());
+    material->use();
     mesh->draw();
 }
 

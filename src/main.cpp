@@ -1,6 +1,8 @@
 #include "core/component.hpp"
 #include "core/components/meshrenderer.hpp"
 #include "core/graphics/mesh.hpp"
+#include "core/graphics/shadermanager.hpp"
+#include "core/material.hpp"
 #include "core/time.hpp"
 #include <core/graphics/shader.hpp>
 #include <SDL3/SDL.h>
@@ -75,8 +77,13 @@ int main() {
     o.addComponent<MeshRenderer>();
 
     MeshRenderer* r = o.getComponent<MeshRenderer>();
-    r->shader = new Shader(readFile("res/shaders/vshader.glsl"), readFile("res/shaders/fshader.glsl"));
-    r->shader->compile();
+    
+    Material* mat = new Material(ShaderManager::getShader("shader"));
+    mat->compileShader();
+
+    r->material = mat;
+
+    mat->setFloat("light", 0.75f);
 
     r->mesh = new Mesh(vertices, uvs, indices);
     r->mesh->create();

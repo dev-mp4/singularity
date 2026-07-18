@@ -15,6 +15,7 @@ public:
     virtual void use() = 0;
     virtual void destroy() = 0;
     virtual void setMat4(const std::string& name, const glm::mat4& matrix) = 0;
+    virtual void setFloat(const std::string& name, float value) = 0;
 };
 
 }

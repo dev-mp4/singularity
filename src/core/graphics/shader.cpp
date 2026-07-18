@@ -29,4 +29,8 @@ void Shader::setMat4(const std::string& name, const glm::mat4& matrix) {
     if (shader) shader->setMat4(name, matrix);
 }
 
+void Shader::setFloat(const std::string& name, float value) {
+    if (shader) shader->setFloat(name, value);
+}
+
 }

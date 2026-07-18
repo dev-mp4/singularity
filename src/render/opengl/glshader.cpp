@@ -81,4 +81,16 @@ void GLShader::setMat4(const std::string& name, const glm::mat4& matrix) {
     glUniformMatrix4fv(loc, 1, false, glm::value_ptr(matrix));
 }
 
+void GLShader::setFloat(const std::string& name, float value) {
+    if (!id) return;
+    
+    GLint loc = glGetUniformLocation(id, name.c_str());
+    if (loc < 0) {
+        Log::error() << "Uniform " << name << " is not found!";
+        return;
+    }
+
+    glUniform1f(loc, value);
+}
+
 }
