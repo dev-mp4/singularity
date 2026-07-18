@@ -1,15 +1,22 @@
 #include "engine.hpp"
-#include "render/renderer.hpp"
+#include "devui/developerui.hpp"
+#include <render/renderer.hpp>
 #include <util/types.hpp>
 #include <util/consts.hpp>
 #include <logger/logger.hpp>
 #include <core/time.hpp>
+#include <core/devui/developerui.hpp>
+
+#include <imgui.h>
+#include <imgui_impl_sdl3.h>
+#include <imgui_impl_opengl3.h>
 
 namespace singularity {
 
 Engine* Engine::instance;
 
-Engine::Engine(const std::string& title, int width, int height, RendererType rendererType) : window(title, width, height, rendererType), input(window), renderer(rendererType) {
+Engine::Engine(const std::string& title, int width, int height, RendererType rendererType) : window(title, width, height, rendererType), input(window), renderer(rendererType),
+    devuiState(false) {
     instance = this;
 }
 
@@ -27,6 +34,9 @@ bool Engine::init() {
     if (!renderer.init())
         return false;
 
+    if (!initImGui())
+        return false;
+
     Log::info() << "Singularity engine " << VERSION;
 
     return true;
@@ -34,6 +44,10 @@ bool Engine::init() {
 
 void Engine::destroy() {
     scene.destroy();
+
+    if (renderer.getType() == RendererType::OpenGL) ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplSDL3_Shutdown();
+    ImGui::DestroyContext();
 
     renderer.destroy();
     input.destroy();
@@ -70,10 +84,19 @@ void Engine::update() {
     input.update();
 
     if (input.isShouldClose()) isRunning = false;
+    if (input.getKeyDown(KeyCode::F12)) devuiState = !devuiState;
 
     renderer.clear(0, 0, 0);
 
+    ImGuiNewFrame();
+
     scene.update();
+
+    if (devuiState) DeveloperUI::draw();
+
+    ImGui::Render();
+
+    ImGuiDrawFrame();
 
     window.update();
 }
@@ -83,6 +106,33 @@ void Engine::run() {
     while (isRunning) {
         update();
     }
+}
+
+void Engine::ImGuiNewFrame() {
+    if (renderer.getType() == RendererType::OpenGL) ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplSDL3_NewFrame();
+    ImGui::NewFrame();
+}
+
+void Engine::ImGuiDrawFrame() {
+    if (renderer.getType() == RendererType::OpenGL) ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}
+
+bool Engine::initImGui() {
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+
+    if (renderer.getType() == RendererType::OpenGL) {
+        ImGui_ImplSDL3_InitForOpenGL(window.getWindow(), window.getGLContext());
+        ImGui_ImplOpenGL3_Init("#version 440 core");
+    }
+
+    return true;
+}
+
+void Engine::ImGuiPollEvent(SDL_Event* e) {
+    ImGui_ImplSDL3_ProcessEvent(e);
 }
 
 }

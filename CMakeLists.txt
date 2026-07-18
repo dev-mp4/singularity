@@ -24,10 +24,17 @@ FetchContent_Declare(
     GIT_REPOSITORY https://github.com/g-truc/glm.git
     GIT_TAG        1.0.3
 )
+FetchContent_Declare(
+    imgui
+    GIT_REPOSITORY https://github.com/ocornut/imgui.git
+    GIT_TAG        v1.92.8
+)
 
 FetchContent_MakeAvailable(SDL3)
 FetchContent_MakeAvailable(glm)
+FetchContent_MakeAvailable(imgui)
 
+# GLAD
 add_library(glad
     glad/src/glad.c
 )
@@ -36,6 +43,26 @@ target_include_directories(glad PUBLIC glad/include)
 set_target_properties(glad PROPERTIES
     MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL"
 )
+
+# ImGui
+add_library(imgui STATIC
+    ${imgui_SOURCE_DIR}/imgui.cpp
+    ${imgui_SOURCE_DIR}/imgui_draw.cpp
+    ${imgui_SOURCE_DIR}/imgui_tables.cpp
+    ${imgui_SOURCE_DIR}/imgui_widgets.cpp
+    ${imgui_SOURCE_DIR}/imgui_demo.cpp # Optional: useful for the showcase window
+    
+    ${imgui_SOURCE_DIR}/backends/imgui_impl_sdl3.cpp
+
+    ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp
+)
+
+target_include_directories(imgui PUBLIC 
+    ${imgui_SOURCE_DIR}
+    ${imgui_SOURCE_DIR}/backends
+)
+
+target_link_libraries(imgui PUBLIC SDL3::SDL3)
 
 add_executable(singularity
     src/main.cpp
@@ -57,11 +84,15 @@ add_executable(singularity
     src/core/components/meshrenderer.cpp
     src/core/time.cpp
     src/core/material.cpp
+    src/core/devui/developerui.cpp
+    src/core/devui/console.cpp
+    src/core/devui/performance.cpp
 )
 
 target_link_libraries(singularity PUBLIC glad)
 target_link_libraries(singularity PUBLIC SDL3::SDL3)
 target_link_libraries(singularity PUBLIC glm::glm)
+target_link_libraries(singularity PUBLIC imgui)
 
 target_include_directories(singularity PUBLIC src)
 

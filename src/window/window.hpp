@@ -20,8 +20,13 @@ public:
 
     bool pollEvent(WindowEvent& event);
 
+    void setVSync(bool state);
+
     static void* getGLProcLoader();
     static double getTime();
+
+    SDL_Window* getWindow();
+    SDL_GLContext* getGLContext();
 
 private:
     std::string title;
@@ -29,6 +34,7 @@ private:
     RendererType rendererType;
 
     SDL_Window* window;
+    SDL_GLContext glContext;
 };
 
 }

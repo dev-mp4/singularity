@@ -1,5 +1,7 @@
 #include "window.hpp"
-#include "SDL3/SDL_events.h"
+#include "SDL3/SDL_video.h"
+#include "util/types.hpp"
+#include <core/engine.hpp>
 #include <window/sdltokey.hpp>
 #include <window/windowevent.hpp>
 #include <SDL3/SDL.h>
@@ -37,7 +39,7 @@ bool Window::init() {
 
     SDL_DestroyProperties(props);
 
-    SDL_GLContext glContext = SDL_GL_CreateContext(window);
+    glContext = SDL_GL_CreateContext(window);
     if (!glContext) {
         Log::error() << "Failed to create OpenGL context: " << SDL_GetError();
         SDL_DestroyWindow(window);
@@ -68,6 +70,8 @@ void* Window::getGLProcLoader() {
 bool Window::pollEvent(WindowEvent& event) {
     SDL_Event e;
     if (SDL_PollEvent(&e)) {
+        if (Engine::getInstance()) Engine::getInstance()->ImGuiPollEvent(&e);
+
         switch (e.type) {
             case SDL_EVENT_QUIT:
                 event.type = WindowEventType::Quit;
@@ -109,6 +113,19 @@ bool Window::pollEvent(WindowEvent& event) {
 double Window::getTime() {
     Uint64 ms = SDL_GetTicks();
     return ms / 1000.0;
+}
+
+SDL_Window* Window::getWindow() {
+    return window;
+}
+
+SDL_GLContext* Window::getGLContext() {
+    return &glContext;
+}
+
+void Window::setVSync(bool state) {
+    if (rendererType == RendererType::OpenGL)
+        SDL_GL_SetSwapInterval((int) state);
 }
 
 }

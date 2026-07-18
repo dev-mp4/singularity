@@ -15,6 +15,7 @@
 #include <core/gameobject.hpp>
 #include <logger/logger.hpp>
 #include <core/components/transform.hpp>
+#include <imgui.h>
 
 std::vector<float> vertices = {
     -0.5f, -0.5f, 0.0f, // bottom left
@@ -44,13 +45,23 @@ public:
 
     void onStart() {
         transform = gameObject->getComponent<Transform>();
+
+        Log::warn() << "Warning! Too big cock!";
+        Log::error() << "Error! Critically big cock!";
     }
 
     void onDestroy() {
     }
 
     void onFrame() {
-        transform->rotate(glm::vec3(0, 0, 15) * Time::deltaTime);
+        ImGui::Begin("Test");
+
+        ImGui::Button("Rotate quad");
+        if (ImGui::IsItemActive()) {
+            transform->rotate(glm::vec3(0, 0, 15) * Time::deltaTime);
+        }
+
+        ImGui::End();
     }
 
     void onTick() {

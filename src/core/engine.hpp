@@ -29,6 +29,11 @@ public:
     void update();
     void run();
 
+    void ImGuiNewFrame();
+    void ImGuiDrawFrame();
+
+    void ImGuiPollEvent(SDL_Event* e);
+
 private:
     static Engine* instance;
 
@@ -40,6 +45,10 @@ private:
     Renderer renderer;
 
     Scene scene;
+
+    bool devuiState;
+
+    bool initImGui();
 };
 
 }

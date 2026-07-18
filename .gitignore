@@ -1,8 +1,4 @@
-/subprojects/*
-!/subprojects/*.wrap
-!/subprojects/flecs
-!/subprojects/glm
 /build
 /.cache
 compile_commands.json
-/sdk
+/imgui.ini

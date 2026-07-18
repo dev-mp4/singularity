@@ -1,15 +1,22 @@
 #include "logger.hpp"
 #include <ctime>
 #include <iomanip>
+#include <sstream>
 
 namespace singularity {
 
+std::vector<LogEntry> LogStream::history;
+
 LogStream::LogStream(const char* level) : level(level) {}
 LogStream::~LogStream() {
-    // flush on destruction
-    std::cout << "[" << level << "] "
+    std::stringstream fmt;
+    fmt << "[" << level << "] "
         << "[" << currentTime() << "] >> "
-        << buffer.str() << std::endl;
+        << buffer.str();
+
+    std::cout << fmt.str() << std::endl;
+    
+    history.push_back({fmt.str(), level});
 }
 
 LogStream& LogStream::operator<<(Manip manip) {
