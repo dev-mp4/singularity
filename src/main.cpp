@@ -1,4 +1,5 @@
 #include "core/component.hpp"
+#include "core/components/meshrenderer.hpp"
 #include "core/graphics/mesh.hpp"
 #include "core/time.hpp"
 #include <core/graphics/shader.hpp>
@@ -37,31 +38,17 @@ class MyComp : public Component {
 public:
     COMPONENT(MyComp)
 
-    Mesh* mesh;
-    Shader* shader;
     Transform* transform;
 
     void onStart() {
-        shader = new Shader(readFile("res/shader.vsh"), readFile("res/shader.fsh"));
-        shader->compile();
-
-        mesh = new Mesh(vertices, uvs, indices);
-        mesh->create();
-
         transform = gameObject->getComponent<Transform>();
     }
 
     void onDestroy() {
-        shader->destroy();
-        mesh->destroy();
     }
 
     void onFrame() {
         transform->rotate(glm::vec3(0, 0, 15) * Time::deltaTime);
-
-        shader->use();
-        shader->setMat4("vModelMatrix", transform->getMatrix());
-        mesh->draw();
     }
 
     void onTick() {
@@ -85,6 +72,14 @@ int main() {
 
     o.addComponent<Transform>();
     o.addComponent<MyComp>();
+    o.addComponent<MeshRenderer>();
+
+    MeshRenderer* r = o.getComponent<MeshRenderer>();
+    r->shader = new Shader(readFile("res/shaders/vshader.glsl"), readFile("res/shaders/fshader.glsl"));
+    r->shader->compile();
+
+    r->mesh = new Mesh(vertices, uvs, indices);
+    r->mesh->create();
 
     engine.getScene().addGameObject(std::move(o));
 

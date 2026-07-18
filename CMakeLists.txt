@@ -53,6 +53,7 @@ add_executable(singularity
     src/core/graphics/mesh.cpp
     src/core/graphics/shader.cpp
     src/core/components/transform.cpp
+    src/core/components/meshrenderer.cpp
     src/core/time.cpp
 )
 
