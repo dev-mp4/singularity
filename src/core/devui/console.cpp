@@ -11,6 +11,8 @@ void Console::draw() {
     ImGui::Begin("Console");
 
     if (ImGui::Button("Clear logs")) LogStream::clearHistory();
+    ImGui::SameLine();
+    if (ImGui::Button("Save logs")) LogStream::saveLogs();
 
     ImGui::Separator();
 

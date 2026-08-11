@@ -5,10 +5,14 @@
 namespace singularity {
 
 Transform::Transform() : position(0), eulerAngles(0), rotation(glm::identity<glm::quat>()), scale(1),
-    forward(0), up(0), right(0) {}
+    forward(0), up(0), right(0) {
+    update();
+}
 
 Transform::Transform(glm::vec3 position, glm::quat rotation, glm::vec3 scale) : position(position), eulerAngles(0), rotation(rotation), scale(scale),
-    forward(0), up(0), right(0) {}
+    forward(0), up(0), right(0) {
+    update();
+}
 
 Transform::~Transform() {}
 
@@ -67,7 +71,7 @@ void Transform::setScale(glm::vec3 newScale) {
 }
 
 void Transform::update() {
-    forward = glm::normalize(rotation * glm::vec3(0.0f, 0.0f, 1.0f));
+    forward = glm::normalize(rotation * glm::vec3(0.0f, 0.0f, -1.0f));
     up      = glm::normalize(rotation * glm::vec3(0.0f, 1.0f, 0.0f));
     right   = glm::normalize(rotation * glm::vec3(1.0f, 0.0f, 0.0f));
 }
@@ -77,6 +81,7 @@ void Transform::onDestroy() {}
 void Transform::onFrame() {}
 void Transform::onTick() {}
 void Transform::afterFrame() {}
+void Transform::onRender() {}
 void Transform::afterTick() {}
 
 }

@@ -1,6 +1,7 @@
 #include "meshrenderer.hpp"
 #include <logger/logger.hpp>
 #include <core/gameobject.hpp>
+#include <core/engine.hpp>
 
 namespace singularity {
 
@@ -8,12 +9,12 @@ void MeshRenderer::onStart() {
     transform = gameObject->getComponent<Transform>();
 }
 
-void MeshRenderer::onDestroy() {
-    if (material) material->destroy();
-    if (mesh) mesh->destroy();
-}
+void MeshRenderer::onDestroy() {}
+void MeshRenderer::onFrame() {}
+void MeshRenderer::onTick() {}
+void MeshRenderer::afterFrame() {}
 
-void MeshRenderer::onFrame() {
+void MeshRenderer::onRender() {
     if (!material || !mesh) {
         Log::error() << "No material or mesh specified in mesh renderer!";
         return;
@@ -24,21 +25,18 @@ void MeshRenderer::onFrame() {
         return;
     }
 
-    material->setMat4("vModelMatrix", transform->getMatrix());
-    material->use();
-    mesh->draw();
+    auto cams = Engine::getInstance()->getScene().getCameras();
+    if (cams.size() == 0)
+        Log::warn() << "No cameras found!";
+
+    for (auto cam : cams) {
+        material->setMat4("vModel", transform->getMatrix());
+        material->setMat4("vProjView", cam->getProjView());
+        material->use();
+        mesh->draw();
+    }
 }
 
-void MeshRenderer::onTick() {
-
-}
-
-void MeshRenderer::afterFrame() {
-
-}
-
-void MeshRenderer::afterTick() {
-
-}
+void MeshRenderer::afterTick() {}
 
 }

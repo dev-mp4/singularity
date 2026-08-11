@@ -29,6 +29,7 @@ public:
 
     static const std::vector<LogEntry>& getHistory() { return history; }
     static void clearHistory() { history.clear(); }
+    static void saveLogs();
 
 private:
     const char* level;

@@ -2,6 +2,7 @@
 #include <ctime>
 #include <iomanip>
 #include <sstream>
+#include <fstream>
 
 namespace singularity {
 
@@ -17,6 +18,20 @@ LogStream::~LogStream() {
     std::cout << fmt.str() << std::endl;
     
     history.push_back({fmt.str(), level});
+}
+
+void LogStream::saveLogs() {
+    std::ofstream file("log.txt");
+    if (!file.is_open()) {
+        Log::error() << "Failed to save logs to log.txt!";
+        return;
+    }
+
+    for (auto log : history) {
+        file << log.text << std::endl;
+    }
+
+    file.close();
 }
 
 LogStream& LogStream::operator<<(Manip manip) {

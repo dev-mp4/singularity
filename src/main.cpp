@@ -2,7 +2,7 @@
 #include "core/components/meshrenderer.hpp"
 #include "core/graphics/mesh.hpp"
 #include "core/graphics/shadermanager.hpp"
-#include "core/material.hpp"
+#include "core/graphics/material.hpp"
 #include "core/time.hpp"
 #include <core/graphics/shader.hpp>
 #include <SDL3/SDL.h>
@@ -43,17 +43,14 @@ public:
 
     Transform* transform;
 
-    void onStart() {
+    void onStart() override {
         transform = gameObject->getComponent<Transform>();
-
-        Log::warn() << "Warning! Too big cock!";
-        Log::error() << "Error! Critically big cock!";
     }
 
-    void onDestroy() {
+    void onDestroy() override {
     }
 
-    void onFrame() {
+    void onFrame() override {
         ImGui::Begin("Test");
 
         ImGui::Button("Rotate quad");
@@ -64,15 +61,63 @@ public:
         ImGui::End();
     }
 
-    void onTick() {
+    void onTick() override {
 
     }
 
-    void afterFrame() {
+    void afterFrame() override {
 
     }
 
-    void afterTick() {
+    void onRender() override {
+
+    }
+
+    void afterTick() override {
+
+    }
+};
+
+class Cam : public Component {
+    COMPONENT(Cam)
+
+public:
+    glm::vec3 pos;
+
+    Transform* transform;
+
+    void onStart() override {
+        transform = gameObject->getComponent<Transform>();
+    }
+
+    void onDestroy() override {
+    }
+
+    void onFrame() override {
+        ImGui::Begin("Camera test");
+
+        ImGui::SliderFloat("Position X" , &pos.x, -5.0f, 5.0f);
+        ImGui::SliderFloat("Position Y" , &pos.y, -5.0f, 5.0f);
+        ImGui::SliderFloat("Position Z" , &pos.z, -5.0f, 5.0f);
+
+        transform->setPosition(pos);
+
+        ImGui::End();
+    }
+
+    void onTick() override {
+
+    }
+
+    void afterFrame() override {
+
+    }
+
+    void onRender() override {
+
+    }
+
+    void afterTick() override {
 
     }
 };
@@ -85,21 +130,25 @@ int main() {
 
     o.addComponent<Transform>();
     o.addComponent<MyComp>();
-    o.addComponent<MeshRenderer>();
-
-    MeshRenderer* r = o.getComponent<MeshRenderer>();
+    MeshRenderer* r = o.addComponent<MeshRenderer>();
     
     Material* mat = new Material(ShaderManager::getShader("shader"));
     mat->compileShader();
 
     r->material = mat;
 
-    mat->setFloat("light", 0.75f);
-
     r->mesh = new Mesh(vertices, uvs, indices);
     r->mesh->create();
 
+    GameObject cam("Camera");
+    
+    cam.addComponent<Camera>();
+    Transform* t = cam.addComponent<Transform>();
+    t->translate(-t->forward);
+    cam.addComponent<Cam>();
+
     engine.getScene().addGameObject(std::move(o));
+    engine.getScene().addGameObject(std::move(cam));
 
     engine.run();
 

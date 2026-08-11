@@ -50,7 +50,6 @@ add_library(imgui STATIC
     ${imgui_SOURCE_DIR}/imgui_draw.cpp
     ${imgui_SOURCE_DIR}/imgui_tables.cpp
     ${imgui_SOURCE_DIR}/imgui_widgets.cpp
-    ${imgui_SOURCE_DIR}/imgui_demo.cpp # Optional: useful for the showcase window
     
     ${imgui_SOURCE_DIR}/backends/imgui_impl_sdl3.cpp
 
@@ -80,10 +79,11 @@ add_executable(singularity
     src/core/graphics/mesh.cpp
     src/core/graphics/shader.cpp
     src/core/graphics/shadermanager.cpp
+    src/core/graphics/material.cpp
     src/core/components/transform.cpp
     src/core/components/meshrenderer.cpp
+    src/core/components/camera.cpp
     src/core/time.cpp
-    src/core/material.cpp
     src/core/devui/developerui.cpp
     src/core/devui/console.cpp
     src/core/devui/performance.cpp
@@ -103,6 +103,14 @@ if(WIN32)
         $<TARGET_FILE:SDL3::SDL3>
         $<TARGET_FILE_DIR:singularity>
     )
+endif()
+
+# remove RTTI, because it's bad
+if (MSVC)
+    string(REPLACE "/GR" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+    add_compile_options(/GR-)
+else()
+    add_compile_options(-fno-rtti)
 endif()
 
 set_target_properties(singularity PROPERTIES EXPORT_COMPILE_COMMANDS ON)

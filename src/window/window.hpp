@@ -27,10 +27,11 @@ public:
 
     SDL_Window* getWindow();
     SDL_GLContext* getGLContext();
+    
+    unsigned int width, height;
 
 private:
     std::string title;
-    unsigned int width, height;
     RendererType rendererType;
 
     SDL_Window* window;

@@ -1,4 +1,5 @@
 #include "scene.hpp"
+#include <algorithm>
 
 namespace singularity {
 
@@ -12,6 +13,10 @@ void Scene::update() {
 
     for (auto& [k, v] : scene) {
         v.afterFrame();
+    }
+
+    for (auto& [k, v] : scene) {
+        v.onRender();
     }
 }
 
@@ -31,11 +36,6 @@ void Scene::addGameObject(GameObject&& obj) {
 }
 
 GameObject* Scene::getGameObject(const std::string& name) {
-    Log::info() << scene.size();
-    for (auto& [k, v] : scene) {
-        Log::info() << k;
-    }
-
     auto it = scene.find(name);
     if (it != scene.end())
         return &(it->second);
@@ -44,6 +44,22 @@ GameObject* Scene::getGameObject(const std::string& name) {
 
 bool Scene::hasGameObject(const std::string& name) {
     return scene.find(name) != scene.end();
+}
+
+void Scene::addCamera(Camera* cam) {
+    if (std::find(cameras.begin(), cameras.end(), cam) == cameras.end()) cameras.push_back(cam);
+}
+
+void Scene::removeCamera(Camera* cam) {
+    auto it = std::find(cameras.begin(), cameras.end(), cam);
+    if (it == cameras.end()) return;
+    // swap-and-pop
+    *it = cameras.back();
+    cameras.pop_back();
+}
+
+std::vector<Camera*>& Scene::getCameras() {
+    return cameras;
 }
 
 }

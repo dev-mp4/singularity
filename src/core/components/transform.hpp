@@ -49,6 +49,7 @@ public:
     void onFrame() override;
     void onTick() override;
     void afterFrame() override;
+    void onRender() override;
     void afterTick() override;
 };
 

@@ -19,3 +19,9 @@ Run `cmake --build build` to compile dependencies and project.
 ## Usage
 
 While engine is still under active development, you can just compile and run test scene.
+
+## Features
+
+Engine has Unity-like architecture, built-in ImGui support, developer UI(press F12 to open it), planned features are:  
+- [ ] Performance profiler
+- [ ] Event bus system(just like Java)

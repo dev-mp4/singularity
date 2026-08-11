@@ -21,6 +21,7 @@ public:
     virtual void onFrame() = 0;
     virtual void onTick() = 0;
     virtual void afterFrame() = 0;
+    virtual void onRender() = 0;
     virtual void afterTick() = 0;
 };
 

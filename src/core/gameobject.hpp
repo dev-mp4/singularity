@@ -43,6 +43,7 @@ public:
     void onFrame();
     void onTick();
     void afterFrame();
+    void onRender();
     void afterTick();
 
     void destroy();

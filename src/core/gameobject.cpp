@@ -35,6 +35,12 @@ void GameObject::afterFrame() {
     }
 }
 
+void GameObject::onRender() {
+    for (auto& [k, v] : components) {
+        v->onRender();
+    }
+}
+
 void GameObject::afterTick() {
     for (auto& [k, v] : components) {
         v->afterTick();
