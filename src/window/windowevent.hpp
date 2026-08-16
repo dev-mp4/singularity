@@ -14,22 +14,22 @@ enum class WindowEventType {
     MouseWheel
 };
 
-struct KeyEvent {
+struct WindowKeyEvent {
     KeyCode key = KeyCode::Unknown;
     bool down = false;
 };
 
-struct MouseClickEvent {
+struct WindowMouseClickEvent {
     int button = -1;
     bool down = false;
 };
 
-struct MouseMotionEvent {
+struct WindowMouseMotionEvent {
     double x = 0;
     double y = 0;
 };
 
-struct MouseWheelEvent {
+struct WindowMouseWheelEvent {
     float scroll = 0;
 };
 
@@ -40,10 +40,10 @@ public:
     ~WindowEvent();
 
     WindowEventType type;
-    KeyEvent key;
-    MouseClickEvent mouseclick;
-    MouseMotionEvent mousemotion;
-    MouseWheelEvent mousewheel;
+    WindowKeyEvent key;
+    WindowMouseClickEvent mouseclick;
+    WindowMouseMotionEvent mousemotion;
+    WindowMouseWheelEvent mousewheel;
 };
 
 }

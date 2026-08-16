@@ -6,6 +6,18 @@
 
 namespace singularity {
 
+struct KeyEvent {
+    KeyCode key;
+    bool isPressed;
+};
+
+struct MouseClickEvent {
+    int button;
+    bool isPressed;
+};
+
+struct QuitEvent {};
+
 class Input {
 public:
     Input(Window& window);
@@ -31,8 +43,6 @@ public:
 
     float getScrollValue();
 
-    bool isShouldClose();
-
 private:
     Window& window;
 
@@ -46,8 +56,6 @@ private:
     float mouseDeltaX;
     float mouseDeltaY;
     float scroll;
-
-    bool shouldClose;
 };
 
 }

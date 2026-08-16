@@ -37,6 +37,9 @@ bool Engine::init() {
     if (!initImGui())
         return false;
 
+    bus.subscribe<KeyEvent>(this, &Engine::onKey);
+    bus.subscribe<QuitEvent>(this, &Engine::onQuit);
+
     Log::info() << "Singularity engine " << VERSION;
 
     return true;
@@ -76,15 +79,16 @@ Scene& Engine::getScene() {
     return scene;
 }
 
+EventBus& Engine::getEventBus() {
+    return bus;
+}
+
 void Engine::update() {
     Time::time = Window::getTime();
     Time::deltaTime = Time::time - Time::_lastTime;
     Time::_lastTime = Time::time;
 
     input.update();
-
-    if (input.isShouldClose()) isRunning = false;
-    if (input.getKeyDown(KeyCode::F12)) devuiState = !devuiState;
 
     renderer.clear(0, 0, 0);
 
@@ -99,6 +103,14 @@ void Engine::update() {
     ImGuiDrawFrame();
 
     window.update();
+}
+
+void Engine::onKey(const KeyEvent& e) {
+    if (e.isPressed && e.key == KeyCode::F12) devuiState = !devuiState;
+}
+
+void Engine::onQuit(const QuitEvent& e) {
+    isRunning = false;
 }
 
 void Engine::run() {

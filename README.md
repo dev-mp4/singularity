@@ -22,6 +22,12 @@ While engine is still under active development, you can just compile and run tes
 
 ## Features
 
-Engine has Unity-like architecture, built-in ImGui support, developer UI(press F12 to open it), planned features are:  
+Engine has Unity-like architecture, built-in ImGui support, developer UI(press F12 to open it), Java-like [event bus](https://github.com/hexx1edev/EventBus).
+Planned features are:  
+- [x] Event bus
 - [ ] Performance profiler
-- [ ] Event bus system(just like Java)
+- [ ] Fully customizable render pipeline
+
+## License
+
+The engine is licensed under [LGPL-3.0](LICENSE.txt). Feel free to use it in any kind of project and contribute!

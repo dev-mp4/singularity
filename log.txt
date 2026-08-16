@@ -1,2 +1,0 @@
-[INFO] [13:24:49] >> 4.6.0 Core Profile Context 26.7.1.260713
-[INFO] [13:24:49] >> Singularity engine v1.0-dev

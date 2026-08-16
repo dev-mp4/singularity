@@ -29,10 +29,16 @@ FetchContent_Declare(
     GIT_REPOSITORY https://github.com/ocornut/imgui.git
     GIT_TAG        v1.92.8
 )
+FetchContent_Declare(
+    EventBus
+    GIT_REPOSITORY https://github.com/hexx1edev/EventBus.git
+    GIT_TAG        1.0.0
+)
 
 FetchContent_MakeAvailable(SDL3)
 FetchContent_MakeAvailable(glm)
 FetchContent_MakeAvailable(imgui)
+FetchContent_MakeAvailable(EventBus)
 
 # GLAD
 add_library(glad
@@ -92,6 +98,7 @@ add_executable(singularity
 target_link_libraries(singularity PUBLIC glad)
 target_link_libraries(singularity PUBLIC SDL3::SDL3)
 target_link_libraries(singularity PUBLIC glm::glm)
+target_link_libraries(singularity PUBLIC EventBus::EventBus)
 target_link_libraries(singularity PUBLIC imgui)
 
 target_include_directories(singularity PUBLIC src)

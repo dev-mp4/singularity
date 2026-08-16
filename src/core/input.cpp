@@ -1,6 +1,7 @@
 #include "input.hpp"
 #include <window/windowevent.hpp>
 #include <window/window.hpp>
+#include <core/engine.hpp>
 
 namespace singularity {
 
@@ -19,8 +20,6 @@ bool Input::init() {
     mouseDeltaY = 0.0f;
     scroll = 0.0f;
 
-    shouldClose = false;
-
     return true;
 }
 
@@ -29,6 +28,9 @@ void Input::destroy() {
 }
 
 void Input::update() {
+    Engine* engine = Engine::getInstance();
+    if (!engine) return;
+
     mouseDeltaX = 0.0f;
     mouseDeltaY = 0.0f;
     scroll = 0.0f;
@@ -40,13 +42,13 @@ void Input::update() {
     while (window.pollEvent(event)) {
         switch (event.type) {
             case WindowEventType::KeyPress:
-                if (event.key.down) keys.set((int) event.key.key, true);
-                else keys.set((int) event.key.key, false);
+                keys.set((int) event.key.key, event.key.down);
+                engine->getEventBus().post<KeyEvent>({event.key.key, event.key.down});
                 break;
             case WindowEventType::MouseClick:
                 if (event.mouseclick.button < 32) {
-                    if (event.mouseclick.down) mouseButtons.set(event.mouseclick.button, true);
-                    else mouseButtons.set(event.mouseclick.button, false);
+                    mouseButtons.set(event.mouseclick.button, event.mouseclick.down);
+                    engine->getEventBus().post<MouseClickEvent>({event.mouseclick.button, event.mouseclick.down});
                 }
                 break;
             case WindowEventType::MouseMotion:
@@ -59,7 +61,7 @@ void Input::update() {
                 scroll += event.mousewheel.scroll;
                 break;
             case WindowEventType::Quit:
-                shouldClose = true;
+                engine->getEventBus().post<QuitEvent>({});
             default:
                 break;
         }
@@ -108,10 +110,6 @@ float Input::getMouseY() {
 
 float Input::getScrollValue() {
     return scroll;
-}
-
-bool Input::isShouldClose() {
-    return shouldClose;
 }
 
 
