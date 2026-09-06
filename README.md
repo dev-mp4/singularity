@@ -16,6 +16,11 @@ Currently, I tested engine with MSVC only, install MSVC(or simply Visual Studio 
 Run `cmake -S . -B build` to bootstrap project and download dependencies.  
 Run `cmake --build build` to compile dependencies and project.
 
+> [!NOTE]
+> If you want to modify engine's source code and you use MSVC and C++ LSP that require compilation database(a.k.a. `compile_commands.json`),  
+> clangd for example, you'll have to use Ninja generator, because MSBuild doesn't support generating compilation database.  
+> Install `ninja`, open VS Developer console and run bootstrap here, but add `-G Ninja` to bootstrap command.
+
 ## Usage
 
 While engine is still under active development, you can just compile and run test scene.
