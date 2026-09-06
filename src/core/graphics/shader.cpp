@@ -33,4 +33,8 @@ void Shader::setFloat(const std::string& name, float value) {
     if (shader) shader->setFloat(name, value);
 }
 
+void Shader::setInt(const std::string& name, int value) {
+    if (shader) shader->setInt(name, value);
+}
+
 }

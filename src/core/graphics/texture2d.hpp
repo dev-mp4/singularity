@@ -1,0 +1,26 @@
+#ifndef SINGULARITY_TEXTURE2D_HPP
+#define SINGULARITY_TEXTURE2D_HPP
+
+#include <util/types.hpp>
+#include <render/itexture2d.hpp>
+
+namespace singularity {
+
+class Texture2D {
+public:
+    Texture2D();
+    ~Texture2D();
+
+    void fromImage(Image& image);
+
+    void bind(int unit);
+
+    void destroy();
+
+private:
+    ITexture2D* texture;
+};
+
+}
+
+#endif

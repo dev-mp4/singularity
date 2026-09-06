@@ -93,4 +93,16 @@ void GLShader::setFloat(const std::string& name, float value) {
     glUniform1f(loc, value);
 }
 
+void GLShader::setInt(const std::string& name, int value) {
+    if (!id) return;
+    
+    GLint loc = glGetUniformLocation(id, name.c_str());
+    if (loc < 0) {
+        Log::error() << "Uniform " << name << " is not found!";
+        return;
+    }
+
+    glUniform1i(loc, value);
+}
+
 }

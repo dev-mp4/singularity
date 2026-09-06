@@ -11,6 +11,18 @@ struct Image {
     std::vector<unsigned char> data;
 };
 
+enum class WrapMode {
+    Repeat,
+    ClampToEdge,
+    Mirror
+};
+
+enum class FilteringMode {
+    Pixel,
+    Bilinear,
+    Trilinear
+};
+
 enum class RendererType {
     OpenGL
 };

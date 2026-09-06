@@ -3,7 +3,9 @@
 #include "core/graphics/mesh.hpp"
 #include "core/graphics/shadermanager.hpp"
 #include "core/graphics/material.hpp"
+#include "core/graphics/texture2d.hpp"
 #include "core/time.hpp"
+#include "loader/png.hpp"
 #include <core/graphics/shader.hpp>
 #include <SDL3/SDL.h>
 #include <window/window.hpp>
@@ -25,14 +27,15 @@ std::vector<float> vertices = {
 };
 
 std::vector<float> uvs = {
-    -1.0f, -1.0f,
-    -1.0f, 1.0f,
-    1.0f, -1.0f,
-    1.0f, 1.0f
+    0.0f, 0.0f, // bottom left (corresponds to -0.5f, -0.5f)
+    0.0f, 1.0f, // top left    (corresponds to -0.5f,  0.5f)
+    1.0f, 0.0f, // bottom right (corresponds to  0.5f, -0.5f)
+    1.0f, 1.0f  // top right    (corresponds to  0.5f,  0.5f)
 };
 
 std::vector<unsigned int> indices = {
-    0, 1, 3, 0, 2, 3
+    0, 1, 3,
+    0, 3, 2
 };
 
 using namespace singularity;
@@ -139,6 +142,14 @@ int main() {
 
     r->mesh = new Mesh(vertices, uvs, indices);
     r->mesh->create();
+
+    Image image = PNG::loadFromFile("res/images/image.png");
+    if (image.width == 0) return 1;
+
+    Texture2D* tex = new Texture2D();
+    tex->fromImage(image);
+
+    mat->setTexture2D("tex0", *tex);
 
     GameObject cam("Camera");
     

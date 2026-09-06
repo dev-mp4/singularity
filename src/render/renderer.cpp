@@ -1,4 +1,5 @@
 #include "renderer.hpp"
+#include "opengl/gltexture2d.hpp"
 #include "render/renderer.hpp"
 #include <render/imesh.hpp>
 #include <util/types.hpp>
@@ -57,6 +58,35 @@ IMesh* Renderer::createMesh(const std::vector<float>& vertices, const std::vecto
         else return nullptr;
     }
     return nullptr;
+}
+
+ITexture2D* Renderer::createTextureFromImage(Image& image) {
+    if (type == RendererType::OpenGL) {
+        GLTexture2D* texture = new GLTexture2D();
+        texture->fromImage(image);
+        return texture;
+    }
+    return nullptr;
+}
+
+void Renderer::enableBlend() {
+    if (!renderer) return;
+    renderer->enableBlend();
+}
+
+void Renderer::disableBlend() {
+    if (!renderer) return;
+    renderer->disableBlend();
+}
+
+void Renderer::enableCulling() {
+    if (!renderer) return;
+    renderer->enableCulling();
+}
+
+void Renderer::disableCulling() {
+    if (!renderer) return;
+    renderer->disableCulling();
 }
 
 }

@@ -12,6 +12,10 @@ public:
 
     bool init() override;
     void destroy() override;
+    void enableBlend() override;
+    void disableBlend() override;
+    void enableCulling() override;
+    void disableCulling() override;    
     void clear(float r, float g, float b) override;
 };
 

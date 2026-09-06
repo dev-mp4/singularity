@@ -8,6 +8,10 @@ public:
     virtual ~IRenderer() = default;
     virtual bool init() = 0;
     virtual void destroy() = 0;
+    virtual void enableBlend() = 0;
+    virtual void disableBlend() = 0;
+    virtual void enableCulling() = 0;
+    virtual void disableCulling() = 0;
     virtual void clear(float r, float g, float b) = 0;
 };
 

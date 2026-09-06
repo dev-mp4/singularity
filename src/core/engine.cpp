@@ -1,11 +1,10 @@
 #include "engine.hpp"
-#include "devui/developerui.hpp"
+#include <core/devui/developerui.hpp>
 #include <render/renderer.hpp>
 #include <util/types.hpp>
 #include <util/consts.hpp>
 #include <logger/logger.hpp>
 #include <core/time.hpp>
-#include <core/devui/developerui.hpp>
 
 #include <imgui.h>
 #include <imgui_impl_sdl3.h>
@@ -37,10 +36,17 @@ bool Engine::init() {
     if (!initImGui())
         return false;
 
+    renderer.enableBlend();
+    renderer.enableCulling();
+
     bus.subscribe<KeyEvent>(this, &Engine::onKey);
     bus.subscribe<QuitEvent>(this, &Engine::onQuit);
 
     Log::info() << "Singularity engine " << VERSION;
+
+#ifdef SINGULARITY_DEV_BUILD
+    Log::info() << "Running in developer mode";
+#endif
 
     return true;
 }
@@ -89,24 +95,27 @@ void Engine::update() {
     Time::_lastTime = Time::time;
 
     input.update();
-
     renderer.clear(0, 0, 0);
-
     ImGuiNewFrame();
 
     scene.update();
 
-    if (devuiState) DeveloperUI::draw();
+    if (devuiState) {
+        DeveloperUI::draw();
+    }
 
     ImGui::Render();
 
     ImGuiDrawFrame();
-
     window.update();
 }
 
 void Engine::onKey(const KeyEvent& e) {
-    if (e.isPressed && e.key == KeyCode::F12) devuiState = !devuiState;
+#ifdef SINGULARITY_DEV_BUILD
+    if (e.isPressed && e.key == KeyCode::F12) {
+        devuiState = !devuiState;
+    }
+#endif
 }
 
 void Engine::onQuit(const QuitEvent& e) {

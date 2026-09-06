@@ -6,11 +6,11 @@
 
 namespace singularity {
 
-Image* PNG::loadFromFile(const std::string& filename) {
+Image PNG::loadFromFile(const std::string& filename) {
     std::ifstream file(filename, std::ios::binary | std::ios::ate);
     if (!file) {
         Log::error() << "Failed to open " << filename;
-        return nullptr;
+        return {};
     }
 
     std::streamsize size = file.tellg();
@@ -19,20 +19,20 @@ Image* PNG::loadFromFile(const std::string& filename) {
     std::vector<unsigned char> buffer(size);
     if (!file.read(reinterpret_cast<char*>(buffer.data()), size)) {
         Log::error() << "Failed to read " << filename;
-        return nullptr;
+        return {};
     }
 
     spng_ctx* ctx = spng_ctx_new(0);
     if (!ctx) {
         Log::error() << "Failed to create context";
-        return nullptr;
+        return {};
     }
 
     int ret = spng_set_png_buffer(ctx, buffer.data(), buffer.size());;
     if (ret) {
         spng_ctx_free(ctx);
         Log::error() << "Failed to set PNG buffer: " << spng_strerror(ret);
-        return nullptr;
+        return {};
     }
 
     spng_ihdr ihdr{};
@@ -40,7 +40,7 @@ Image* PNG::loadFromFile(const std::string& filename) {
     if (ret) {
         spng_ctx_free(ctx);
         Log::error() << "Failed to read PNG header: " << spng_strerror(ret);
-        return nullptr;
+        return {};
     }
 
     int width = ihdr.width;
@@ -51,7 +51,7 @@ Image* PNG::loadFromFile(const std::string& filename) {
     if (ret) {
         spng_ctx_free(ctx);
         Log::error() << "Failed to get image size: " << spng_strerror(ret);
-        return nullptr;
+        return {};
     }
 
     std::vector<unsigned char> pixels(out_size);
@@ -59,10 +59,10 @@ Image* PNG::loadFromFile(const std::string& filename) {
     if (ret) {
         spng_ctx_free(ctx);
         Log::error() << "Failed to decode PNG image: " << spng_strerror(ret);
-        return nullptr;
+        return {};
     }
 
-    return new Image {width, height, std::move(pixels)};
+    return {width, height, std::move(pixels)};
 }
 
 }

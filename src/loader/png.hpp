@@ -5,7 +5,7 @@
 #include <util/types.hpp>
 
 namespace singularity::PNG {
-    Image* loadFromFile(const std::string& filename);
+    Image loadFromFile(const std::string& filename);
 }
 
-#endif // SINGULARITY_PNG_HPP
+#endif

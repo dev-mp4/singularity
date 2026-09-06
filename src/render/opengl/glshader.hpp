@@ -17,6 +17,7 @@ public:
 
     void setMat4(const std::string& name, const glm::mat4& matrix) override;
     void setFloat(const std::string& name, float value) override;
+    void setInt(const std::string& name, int value) override;
 
 private:
     unsigned int id;

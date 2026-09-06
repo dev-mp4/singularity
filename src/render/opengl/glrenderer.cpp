@@ -20,6 +20,26 @@ bool GLRenderer::init() {
     return true;
 }
 
+void GLRenderer::enableBlend() {
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+}
+
+void GLRenderer::disableBlend() {
+    glDisable(GL_BLEND);
+}
+
+void GLRenderer::enableCulling() {
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
+    glFrontFace(GL_CW);
+}
+
+void GLRenderer::disableCulling() {
+    glDisable(GL_CULL_FACE);
+}
+
+
 void GLRenderer::destroy() {
     // ...
 }
