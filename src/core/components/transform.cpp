@@ -54,15 +54,21 @@ void Transform::setPosition(glm::vec3 newPos) {
 }
 
 void Transform::setEulerAngles(float x, float y, float z) {
-    rotation = glm::quat(glm::radians(glm::vec3(y, x, z)));
-    eulerAngles = glm::radians(glm::vec3(x, y, z));
+    eulerAngles = glm::vec3(x, y, z);
+    rotation = glm::quat(glm::radians(glm::vec3(x, y, z)));
+    update();
+}
+
+void Transform::setEulerAngles(glm::vec3 _eulerAngles) {
+    eulerAngles = _eulerAngles;
+    rotation = glm::quat(glm::radians(eulerAngles));
     update();
 }
 
 void Transform::setRotation(glm::quat newRot) {
     rotation = newRot;
     glm::vec3 yxz = glm::eulerAngles(rotation);
-    eulerAngles = glm::radians(glm::vec3(yxz.y, yxz.x, yxz.z));
+    eulerAngles = glm::vec3(yxz.y, yxz.x, yxz.z);
     update();
 }
 

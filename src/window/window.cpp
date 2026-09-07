@@ -90,6 +90,8 @@ bool Window::pollEvent(WindowEvent& event) {
                 event.type = WindowEventType::MouseMotion;
                 event.mousemotion.x = e.motion.x;
                 event.mousemotion.y = e.motion.y;
+                event.mousemotion.xrel = e.motion.xrel;
+                event.mousemotion.yrel = e.motion.yrel;
                 return true;
             case SDL_EVENT_MOUSE_BUTTON_DOWN:
                 event.type = WindowEventType::MouseClick;
@@ -126,6 +128,32 @@ SDL_GLContext* Window::getGLContext() {
 void Window::setVSync(bool state) {
     if (rendererType == RendererType::OpenGL)
         SDL_GL_SetSwapInterval((int) state);
+}
+
+void Window::setCursorVisibility(bool visible) {
+    if (visible) {
+        SDL_ShowCursor();
+    } else {
+        SDL_HideCursor();
+    }
+}
+
+void Window::setCursorLock(bool locked) {
+    if (!window)
+        return;
+
+    SDL_SetWindowRelativeMouseMode(window, locked);
+
+    if (locked) {
+        int w, h;
+        SDL_GetWindowSize(window, &w, &h);
+
+        SDL_WarpMouseInWindow(
+            window,
+            w / 2.0f,
+            h / 2.0f
+        );
+    }
 }
 
 }

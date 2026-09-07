@@ -52,8 +52,8 @@ void Input::update() {
                 }
                 break;
             case WindowEventType::MouseMotion:
-                mouseDeltaX += event.mousemotion.x - mouseX;
-                mouseDeltaY += event.mousemotion.y - mouseY;
+                mouseDeltaX += event.mousemotion.xrel; 
+                mouseDeltaY += event.mousemotion.yrel;
                 mouseX = event.mousemotion.x;
                 mouseY = event.mousemotion.y;
                 break;

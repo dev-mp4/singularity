@@ -27,6 +27,8 @@ struct WindowMouseClickEvent {
 struct WindowMouseMotionEvent {
     double x = 0;
     double y = 0;
+    double xrel = 0;
+    double yrel = 0;
 };
 
 struct WindowMouseWheelEvent {

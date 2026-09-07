@@ -27,6 +27,7 @@ public:
     void setPosition(glm::vec3 newPos);
 
     void setEulerAngles(float x, float y, float z);
+    void setEulerAngles(glm::vec3 eulerAngles);
     void setRotation(glm::quat newRot);
     
     void setScale(glm::vec3 newScale);

@@ -1,5 +1,6 @@
 #include "core/component.hpp"
 #include "core/components/meshrenderer.hpp"
+#include "core/engine.hpp"
 #include "core/graphics/mesh.hpp"
 #include "core/graphics/shadermanager.hpp"
 #include "core/graphics/material.hpp"
@@ -20,22 +21,70 @@
 #include <imgui.h>
 
 std::vector<float> vertices = {
-    -0.5f, -0.5f, 0.0f, // bottom left
-    -0.5f, 0.5f, 0.0f,  // top left
-    0.5f, -0.5f, 0.0f,  // bottom right
-    0.5f, 0.5f, 0.0f, // top right
+    // Front face
+    -0.5f, -0.5f,  0.5f, // 0: Bottom-left
+     0.5f, -0.5f,  0.5f, // 1: Bottom-right
+     0.5f,  0.5f,  0.5f, // 2: Top-right
+    -0.5f,  0.5f,  0.5f, // 3: Top-left
+
+    // Back face
+     0.5f, -0.5f, -0.5f, // 4: Bottom-left
+    -0.5f, -0.5f, -0.5f, // 5: Bottom-right
+    -0.5f,  0.5f, -0.5f, // 6: Top-right
+     0.5f,  0.5f, -0.5f, // 7: Top-left
+
+    // Top face
+    -0.5f,  0.5f,  0.5f, // 8: Bottom-left
+     0.5f,  0.5f,  0.5f, // 9: Bottom-right
+     0.5f,  0.5f, -0.5f, // 10: Top-right
+    -0.5f,  0.5f, -0.5f, // 11: Top-left
+
+    // Bottom face
+    -0.5f, -0.5f, -0.5f, // 12: Bottom-left
+     0.5f, -0.5f, -0.5f, // 13: Bottom-right
+     0.5f, -0.5f,  0.5f, // 14: Top-right
+    -0.5f, -0.5f,  0.5f, // 15: Top-left
+
+    // Right face
+     0.5f, -0.5f,  0.5f, // 16: Bottom-left
+     0.5f, -0.5f, -0.5f, // 17: Bottom-right
+     0.5f,  0.5f, -0.5f, // 18: Top-right
+     0.5f,  0.5f,  0.5f, // 19: Top-left
+
+    // Left face
+    -0.5f, -0.5f, -0.5f, // 20: Bottom-left
+    -0.5f, -0.5f,  0.5f, // 21: Bottom-right
+    -0.5f,  0.5f,  0.5f, // 22: Top-right
+    -0.5f,  0.5f, -0.5f  // 23: Top-left
 };
 
 std::vector<float> uvs = {
-    0.0f, 0.0f, // bottom left (corresponds to -0.5f, -0.5f)
-    0.0f, 1.0f, // top left    (corresponds to -0.5f,  0.5f)
-    1.0f, 0.0f, // bottom right (corresponds to  0.5f, -0.5f)
-    1.0f, 1.0f  // top right    (corresponds to  0.5f,  0.5f)
+    // Front
+    0.0f, 1.0f,  1.0f, 1.0f,  1.0f, 0.0f,  0.0f, 0.0f,
+
+    // Back
+    0.0f, 1.0f,  1.0f, 1.0f,  1.0f, 0.0f,  0.0f, 0.0f,
+
+    // Top
+    0.0f, 1.0f,  1.0f, 1.0f,  1.0f, 0.0f,  0.0f, 0.0f,
+
+    // Bottom
+    0.0f, 1.0f,  1.0f, 1.0f,  1.0f, 0.0f,  0.0f, 0.0f,
+
+    // Right
+    0.0f, 1.0f,  1.0f, 1.0f,  1.0f, 0.0f,  0.0f, 0.0f,
+
+    // Left
+    0.0f, 1.0f,  1.0f, 1.0f,  1.0f, 0.0f,  0.0f, 0.0f
 };
 
-std::vector<unsigned int> indices = {
-    0, 1, 3,
-    0, 3, 2
+std::vector<uint32_t> indices = {
+     0,  1,  2,   2,  3,  0, // Front
+     4,  5,  6,   6,  7,  4, // Back
+     8,  9, 10,  10, 11,  8, // Top
+    12, 13, 14,  14, 15, 12, // Bottom
+    16, 17, 18,  18, 19, 16, // Right
+    20, 21, 22,  22, 23, 20  // Left
 };
 
 using namespace singularity;
@@ -85,44 +134,65 @@ class Cam : public Component {
     COMPONENT(Cam)
 
 public:
-    glm::vec3 pos;
+    glm::vec3 pos{0.0f, 0.0f, 0.0f};
+    glm::vec3 rot{0.0f, 0.0f, 0.0f}; // X: Pitch, Y: Yaw, Z: Roll (in degrees)
 
-    Transform* transform;
+    float moveSpeed = 5.0f;
+    float mouseSensitivity = 0.1f;
+
+    Transform* transform = nullptr;
 
     void onStart() override {
         transform = gameObject->getComponent<Transform>();
+        if (transform) {
+            pos = transform->position;
+            rot = transform->eulerAngles;
+        }
     }
 
-    void onDestroy() override {
-    }
+    void onDestroy() override {}
 
     void onFrame() override {
-        ImGui::Begin("Camera test");
+        if (!transform) return;
 
-        ImGui::SliderFloat("Position X" , &pos.x, -5.0f, 5.0f);
-        ImGui::SliderFloat("Position Y" , &pos.y, -5.0f, 5.0f);
-        ImGui::SliderFloat("Position Z" , &pos.z, -5.0f, 5.0f);
+        Input& i = Engine::getInstance()->getInput();
+        Window& w = Engine::getInstance()->getWindow();
 
-        transform->setPosition(pos);
+        if (i.getMouseButton(3)) {
 
-        ImGui::End();
+            rot.y -= i.getMouseDeltaX() * mouseSensitivity;
+            rot.x -= i.getMouseDeltaY() * mouseSensitivity;
+
+            rot.x = glm::clamp(rot.x, -89.0f, 89.0f);
+
+            glm::vec3 moveDir(0.0f);
+
+            if (i.getKey(KeyCode::W)) moveDir += transform->forward;
+            if (i.getKey(KeyCode::S)) moveDir -= transform->forward;
+            if (i.getKey(KeyCode::D)) moveDir += transform->right;
+            if (i.getKey(KeyCode::A)) moveDir -= transform->right;
+
+            if (glm::length(moveDir) > 0.0f) {
+                pos += glm::normalize(moveDir) * moveSpeed * Time::deltaTime;
+            }
+
+            transform->setPosition(pos);
+            transform->setEulerAngles(rot);
+        }
+
+        if (i.getMouseButtonDown(3)) {
+            w.setCursorLock(true);
+            //w.setCursorVisibility(false);
+        } else if (i.getMouseButtonUp(3)) {
+            w.setCursorLock(false);
+            //w.setCursorVisibility(true);
+        }
     }
 
-    void onTick() override {
-
-    }
-
-    void afterFrame() override {
-
-    }
-
-    void onRender() override {
-
-    }
-
-    void afterTick() override {
-
-    }
+    void onTick() override {}
+    void afterFrame() override {}
+    void onRender() override {}
+    void afterTick() override {}
 };
 
 int main() {
@@ -143,7 +213,7 @@ int main() {
     r->mesh = new Mesh(vertices, uvs, indices);
     r->mesh->create();
 
-    Image image = PNG::loadFromFile("res/images/image.png");
+    Image image = PNG::loadFromFile("res/images/box.png");
     if (image.width == 0) return 1;
 
     Texture2D* tex = new Texture2D();

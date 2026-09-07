@@ -32,7 +32,6 @@ void GLRenderer::disableBlend() {
 void GLRenderer::enableCulling() {
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
-    glFrontFace(GL_CW);
 }
 
 void GLRenderer::disableCulling() {

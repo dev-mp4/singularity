@@ -27,6 +27,9 @@ public:
 
     SDL_Window* getWindow();
     SDL_GLContext* getGLContext();
+
+    void setCursorVisibility(bool visible);
+    void setCursorLock(bool locked);
     
     unsigned int width, height;
 
