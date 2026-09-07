@@ -10,7 +10,7 @@ public:
     GLTexture2D();
     ~GLTexture2D() override;
 
-    void fromImage(Image& image) override;
+    bool fromImage(Image& image) override;
 
     void bind(int unit) override;
 

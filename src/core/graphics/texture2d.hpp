@@ -11,7 +11,7 @@ public:
     Texture2D();
     ~Texture2D();
 
-    void fromImage(Image& image);
+    bool fromImage(Image& image);
 
     void bind(int unit);
 

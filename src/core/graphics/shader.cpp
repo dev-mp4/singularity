@@ -13,8 +13,9 @@ bool Shader::compile() {
         return false;
     }
 
-    shader = Engine::getInstance()->getRenderer().compileShader(vertex, fragment);
-    return shader != nullptr;
+    shader = Engine::getInstance()->getRenderer().createShader();
+    if (!shader) return false;
+    return shader->compileGLSL(vertex, fragment);
 }
 
 void Shader::use() {

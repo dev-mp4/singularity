@@ -9,7 +9,7 @@ class ITexture2D {
 public:
     virtual ~ITexture2D() = default;
 
-    virtual void fromImage(Image& image) = 0;
+    virtual bool fromImage(Image& image) = 0;
 
     virtual void bind(int unit) = 0;
 

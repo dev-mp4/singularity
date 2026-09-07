@@ -6,13 +6,15 @@ namespace singularity {
 Texture2D::Texture2D() : texture(nullptr) {}
 Texture2D::~Texture2D() {}
 
-void Texture2D::fromImage(Image& image) {
+bool Texture2D::fromImage(Image& image) {
     if (Engine::getInstance() == nullptr) {
         Log::error() << "No engine instance!";
-        return;
+        return false;
     }
 
-    texture = Engine::getInstance()->getRenderer().createTextureFromImage(image);
+    texture = Engine::getInstance()->getRenderer().createTexture2D();
+    if (!texture) return false;
+    return texture->fromImage(image);
 }
 
 void Texture2D::bind(int unit) {

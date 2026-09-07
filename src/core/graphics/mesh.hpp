@@ -3,23 +3,27 @@
 
 #include <vector>
 #include <render/imesh.hpp>
+#include <glm/glm.hpp>
 
 namespace singularity {
 
 class Mesh {
 public:
-    Mesh(const std::vector<float>& vertices, const std::vector<float>& uvs, const std::vector<unsigned int>& indices);
-    Mesh(const std::vector<float>& vertices, const std::vector<unsigned int>& indices);
+    Mesh(const std::vector<glm::vec3>& vertices, const std::vector<glm::vec2>& uvs, const std::vector<glm::vec3>& normals, const std::vector<unsigned int>& indices);
     ~Mesh();
 
     bool create();
     void draw();
     void destroy();
 
+    void recalculateNormals();
+
 private:
     IMesh* mesh;
 
-    std::vector<float> vertices;
+    std::vector<glm::vec3> vertices;
+    std::vector<glm::vec2> uvs;
+    std::vector<glm::vec3> normals;
     std::vector<unsigned int> indices;
 };
 

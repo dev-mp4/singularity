@@ -2,6 +2,7 @@
 #include <vector>
 #include <logger/logger.hpp>
 #include <imgui.h>
+#include <cstring>
 
 namespace singularity {
 

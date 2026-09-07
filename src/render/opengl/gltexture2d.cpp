@@ -30,7 +30,9 @@ static int wrapToValue(WrapMode mode) {
     }
 }
 
-void GLTexture2D::fromImage(Image& image) {
+bool GLTexture2D::fromImage(Image& image) {
+    if (image.width == 0 || image.height == 0) return false;
+
     int min = filterToValue(filter, true);
     int mag = filterToValue(filter, false);
 
@@ -64,6 +66,7 @@ void GLTexture2D::fromImage(Image& image) {
     glGenerateTextureMipmap(tex);
 
     id = tex;
+    return true;
 }
 
 void GLTexture2D::bind(int unit) {

@@ -42,29 +42,23 @@ RendererType Renderer::getType() {
     return type;
 }
 
-IShader* Renderer::compileShader(const std::string& vertex, const std::string& fragment) {
+IShader* Renderer::createShader() {
     if (type == RendererType::OpenGL) {
-        GLShader* shader = new GLShader();
-        if (shader->compileGLSL(vertex, fragment)) return shader;
-        else return nullptr;
+        return new GLShader();
     }
     return nullptr;
 }
 
-IMesh* Renderer::createMesh(const std::vector<float>& vertices, const std::vector<unsigned int>& indices, const std::vector<unsigned short>& attributes) {
+IMesh* Renderer::createMesh() {
     if (type == RendererType::OpenGL) {
-        GLMesh* mesh = new GLMesh();
-        if (mesh->create(vertices, indices, attributes)) return mesh;
-        else return nullptr;
+        return new GLMesh();
     }
     return nullptr;
 }
 
-ITexture2D* Renderer::createTextureFromImage(Image& image) {
+ITexture2D* Renderer::createTexture2D() {
     if (type == RendererType::OpenGL) {
-        GLTexture2D* texture = new GLTexture2D();
-        texture->fromImage(image);
-        return texture;
+        return new GLTexture2D();
     }
     return nullptr;
 }

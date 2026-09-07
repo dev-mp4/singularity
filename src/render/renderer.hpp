@@ -26,9 +26,9 @@ public:
 
     RendererType getType();
 
-    IShader* compileShader(const std::string& vertex, const std::string& fragment);
-    IMesh* createMesh(const std::vector<float>& vertices, const std::vector<unsigned int>& indices, const std::vector<unsigned short>& attributes);
-    ITexture2D* createTextureFromImage(Image& image);
+    IShader* createShader();
+    IMesh* createMesh();
+    ITexture2D* createTexture2D();
 
 private:
     RendererType type;

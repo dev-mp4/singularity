@@ -20,62 +20,68 @@
 #include <core/components/transform.hpp>
 #include <imgui.h>
 
-std::vector<float> vertices = {
+std::vector<glm::vec3> vertices = {
     // Front face
-    -0.5f, -0.5f,  0.5f, // 0: Bottom-left
-     0.5f, -0.5f,  0.5f, // 1: Bottom-right
-     0.5f,  0.5f,  0.5f, // 2: Top-right
-    -0.5f,  0.5f,  0.5f, // 3: Top-left
+    glm::vec3(-0.5f, -0.5f,  0.5f), // 0: Bottom-left
+     glm::vec3(0.5f, -0.5f,  0.5f), // 1: Bottom-right
+     glm::vec3(0.5f,  0.5f,  0.5f), // 2: Top-right
+    glm::vec3(-0.5f,  0.5f,  0.5f), // 3: Top-left
 
     // Back face
-     0.5f, -0.5f, -0.5f, // 4: Bottom-left
-    -0.5f, -0.5f, -0.5f, // 5: Bottom-right
-    -0.5f,  0.5f, -0.5f, // 6: Top-right
-     0.5f,  0.5f, -0.5f, // 7: Top-left
+     glm::vec3(0.5f, -0.5f, -0.5f), // 4: Bottom-left
+    glm::vec3(-0.5f, -0.5f, -0.5f), // 5: Bottom-right
+    glm::vec3(-0.5f,  0.5f, -0.5f), // 6: Top-right
+     glm::vec3(0.5f,  0.5f, -0.5f), // 7: Top-left
 
     // Top face
-    -0.5f,  0.5f,  0.5f, // 8: Bottom-left
-     0.5f,  0.5f,  0.5f, // 9: Bottom-right
-     0.5f,  0.5f, -0.5f, // 10: Top-right
-    -0.5f,  0.5f, -0.5f, // 11: Top-left
+    glm::vec3(-0.5f,  0.5f,  0.5f), // 8: Bottom-left
+     glm::vec3(0.5f,  0.5f,  0.5f), // 9: Bottom-right
+     glm::vec3(0.5f,  0.5f, -0.5f), // 10: Top-right
+    glm::vec3(-0.5f,  0.5f, -0.5f), // 11: Top-left
 
     // Bottom face
-    -0.5f, -0.5f, -0.5f, // 12: Bottom-left
-     0.5f, -0.5f, -0.5f, // 13: Bottom-right
-     0.5f, -0.5f,  0.5f, // 14: Top-right
-    -0.5f, -0.5f,  0.5f, // 15: Top-left
+    glm::vec3(-0.5f, -0.5f, -0.5f), // 12: Bottom-left
+     glm::vec3(0.5f, -0.5f, -0.5f), // 13: Bottom-right
+     glm::vec3(0.5f, -0.5f,  0.5f), // 14: Top-right
+    glm::vec3(-0.5f, -0.5f,  0.5f), // 15: Top-left
 
     // Right face
-     0.5f, -0.5f,  0.5f, // 16: Bottom-left
-     0.5f, -0.5f, -0.5f, // 17: Bottom-right
-     0.5f,  0.5f, -0.5f, // 18: Top-right
-     0.5f,  0.5f,  0.5f, // 19: Top-left
+     glm::vec3(0.5f, -0.5f,  0.5f), // 16: Bottom-left
+     glm::vec3(0.5f, -0.5f, -0.5f), // 17: Bottom-right
+     glm::vec3(0.5f,  0.5f, -0.5f), // 18: Top-right
+     glm::vec3(0.5f,  0.5f,  0.5f), // 19: Top-left
 
     // Left face
-    -0.5f, -0.5f, -0.5f, // 20: Bottom-left
-    -0.5f, -0.5f,  0.5f, // 21: Bottom-right
-    -0.5f,  0.5f,  0.5f, // 22: Top-right
-    -0.5f,  0.5f, -0.5f  // 23: Top-left
+    glm::vec3(-0.5f, -0.5f, -0.5f), // 20: Bottom-left
+    glm::vec3(-0.5f, -0.5f,  0.5f), // 21: Bottom-right
+    glm::vec3(-0.5f,  0.5f,  0.5f), // 22: Top-right
+    glm::vec3(-0.5f,  0.5f, -0.5f)  // 23: Top-left
 };
 
-std::vector<float> uvs = {
+std::vector<glm::vec2> uvs = {
     // Front
-    0.0f, 1.0f,  1.0f, 1.0f,  1.0f, 0.0f,  0.0f, 0.0f,
+    glm::vec2(0.0f, 1.0f), glm::vec2(1.0f, 1.0f),
+    glm::vec2(1.0f, 0.0f), glm::vec2(0.0f, 0.0f),
 
     // Back
-    0.0f, 1.0f,  1.0f, 1.0f,  1.0f, 0.0f,  0.0f, 0.0f,
+    glm::vec2(0.0f, 1.0f), glm::vec2(1.0f, 1.0f),
+    glm::vec2(1.0f, 0.0f), glm::vec2(0.0f, 0.0f),
 
     // Top
-    0.0f, 1.0f,  1.0f, 1.0f,  1.0f, 0.0f,  0.0f, 0.0f,
+    glm::vec2(0.0f, 1.0f), glm::vec2(1.0f, 1.0f),
+    glm::vec2(1.0f, 0.0f), glm::vec2(0.0f, 0.0f),
 
     // Bottom
-    0.0f, 1.0f,  1.0f, 1.0f,  1.0f, 0.0f,  0.0f, 0.0f,
+    glm::vec2(0.0f, 1.0f), glm::vec2(1.0f, 1.0f),
+    glm::vec2(1.0f, 0.0f), glm::vec2(0.0f, 0.0f),
 
     // Right
-    0.0f, 1.0f,  1.0f, 1.0f,  1.0f, 0.0f,  0.0f, 0.0f,
+    glm::vec2(0.0f, 1.0f), glm::vec2(1.0f, 1.0f),
+    glm::vec2(1.0f, 0.0f), glm::vec2(0.0f, 0.0f),
 
     // Left
-    0.0f, 1.0f,  1.0f, 1.0f,  1.0f, 0.0f,  0.0f, 0.0f
+    glm::vec2(0.0f, 1.0f), glm::vec2(1.0f, 1.0f),
+    glm::vec2(1.0f, 0.0f), glm::vec2(0.0f, 0.0f)
 };
 
 std::vector<uint32_t> indices = {
@@ -87,6 +93,44 @@ std::vector<uint32_t> indices = {
     20, 21, 22,  22, 23, 20  // Left
 };
 
+std::vector<glm::vec3> normals = {
+    // Front (+Z)
+     glm::vec3(0.0f,  0.0f,  1.0f),
+     glm::vec3(0.0f,  0.0f,  1.0f),
+     glm::vec3(0.0f,  0.0f,  1.0f),
+     glm::vec3(0.0f,  0.0f,  1.0f),
+
+    // Back (-Z)
+     glm::vec3(0.0f,  0.0f, -1.0f),
+     glm::vec3(0.0f,  0.0f, -1.0f),
+     glm::vec3(0.0f,  0.0f, -1.0f),
+     glm::vec3(0.0f,  0.0f, -1.0f),
+
+    // Top (+Y)
+     glm::vec3(0.0f,  1.0f,  0.0f),
+     glm::vec3(0.0f,  1.0f,  0.0f),
+     glm::vec3(0.0f,  1.0f,  0.0f),
+     glm::vec3(0.0f,  1.0f,  0.0f),
+
+    // Bottom (-Y)
+     glm::vec3(0.0f, -1.0f,  0.0f),
+     glm::vec3(0.0f, -1.0f,  0.0f),
+     glm::vec3(0.0f, -1.0f,  0.0f),
+     glm::vec3(0.0f, -1.0f,  0.0f),
+
+    // Right (+X)
+     glm::vec3(1.0f,  0.0f,  0.0f),
+     glm::vec3(1.0f,  0.0f,  0.0f),
+     glm::vec3(1.0f,  0.0f,  0.0f),
+     glm::vec3(1.0f,  0.0f,  0.0f),
+
+    // Left (-X)
+    glm::vec3(-1.0f,  0.0f,  0.0f),
+    glm::vec3(-1.0f,  0.0f,  0.0f),
+    glm::vec3(-1.0f,  0.0f,  0.0f),
+    glm::vec3(-1.0f,  0.0f,  0.0f)
+};
+
 using namespace singularity;
 
 class MyComp : public Component {
@@ -94,6 +138,7 @@ public:
     COMPONENT(MyComp)
 
     Transform* transform;
+    float speed = 15.0f;
 
     void onStart() override {
         transform = gameObject->getComponent<Transform>();
@@ -105,10 +150,12 @@ public:
     void onFrame() override {
         ImGui::Begin("Test");
 
-        ImGui::Button("Rotate quad");
+        ImGui::Button("Rotate box");
         if (ImGui::IsItemActive()) {
-            transform->rotate(glm::vec3(0, 0, 15) * Time::deltaTime);
+            transform->rotate(glm::vec3(speed) * Time::deltaTime);
         }
+
+        ImGui::SliderFloat("Speed", &speed, 0.0f, 100.0f);
 
         ImGui::End();
     }
@@ -210,7 +257,7 @@ int main() {
 
     r->material = mat;
 
-    r->mesh = new Mesh(vertices, uvs, indices);
+    r->mesh = new Mesh(vertices, uvs, normals, indices);
     r->mesh->create();
 
     Image image = PNG::loadFromFile("res/images/box.png");
