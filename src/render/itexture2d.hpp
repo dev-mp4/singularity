@@ -15,9 +15,9 @@ public:
 
     virtual void destroy() = 0;
 
-    bool mipmaps;
-    WrapMode wrapMode;
-    FilteringMode filter;
+    bool mipmaps = true;
+    WrapMode wrapMode = WrapMode::ClampToEdge;
+    FilteringMode filter = FilteringMode::Bilinear;
 };
 
 }

@@ -14,6 +14,9 @@ bool Texture2D::fromImage(Image& image) {
 
     texture = Engine::getInstance()->getRenderer().createTexture2D();
     if (!texture) return false;
+    texture->mipmaps = mipmaps;
+    texture->wrapMode = wrapMode;
+    texture->filter = filter;
     return texture->fromImage(image);
 }
 
