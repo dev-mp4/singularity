@@ -20,6 +20,7 @@ public:
     void afterTick() override;
 
     glm::mat4 getProjView();
+    glm::vec3 getPos();
 
     void setFOV(float fov);
     void setClipping(float near, float far);

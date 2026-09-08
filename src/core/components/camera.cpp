@@ -46,7 +46,14 @@ glm::mat4 Camera::getProjView() {
     if (!t)
         return glm::mat4(1.0f);
 
-    return proj * glm::inverse(t->getMatrix());
+    return proj * glm::inverse(t->getModelMatrix());
+}
+
+glm::vec3 Camera::getPos() {
+    if (!t)
+        return glm::vec3(0.0f);
+
+    return t->position;
 }
 
 void Camera::setFOV(float fov) {

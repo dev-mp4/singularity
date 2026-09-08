@@ -36,7 +36,7 @@ void Transform::rotate(float pitch, float yaw, float roll) {
     update();
 }
 
-glm::mat4 Transform::getMatrix() {
+glm::mat4 Transform::getModelMatrix() {
     glm::mat4 matrix(1.0f);
 
     matrix = glm::translate(matrix, position);

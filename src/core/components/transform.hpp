@@ -32,7 +32,7 @@ public:
     
     void setScale(glm::vec3 newScale);
 
-    glm::mat4 getMatrix();
+    glm::mat4 getModelMatrix();
 
     void update();
 

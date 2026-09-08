@@ -81,6 +81,18 @@ void GLShader::setMat4(const std::string& name, const glm::mat4& matrix) {
     glUniformMatrix4fv(loc, 1, false, glm::value_ptr(matrix));
 }
 
+void GLShader::setMat3(const std::string& name, const glm::mat3& matrix) {
+    if (!id) return;
+    
+    GLint loc = glGetUniformLocation(id, name.c_str());
+    if (loc < 0) {
+        Log::error() << "Uniform " << name << " is not found!";
+        return;
+    }
+
+    glUniformMatrix3fv(loc, 1, false, glm::value_ptr(matrix));
+}
+
 void GLShader::setFloat(const std::string& name, float value) {
     if (!id) return;
     
@@ -103,6 +115,18 @@ void GLShader::setInt(const std::string& name, int value) {
     }
 
     glUniform1i(loc, value);
+}
+
+void GLShader::setVec3(const std::string& name, const glm::vec3& vector) {
+    if (!id) return;
+    
+    GLint loc = glGetUniformLocation(id, name.c_str());
+    if (loc < 0) {
+        Log::error() << "Uniform " << name << " is not found!";
+        return;
+    }
+
+    glUniform3fv(loc, 1, glm::value_ptr(vector));
 }
 
 }

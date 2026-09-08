@@ -30,12 +30,20 @@ void Shader::setMat4(const std::string& name, const glm::mat4& matrix) {
     if (shader) shader->setMat4(name, matrix);
 }
 
+void Shader::setMat3(const std::string& name, const glm::mat3& matrix) {
+    if (shader) shader->setMat3(name, matrix);
+}
+
 void Shader::setFloat(const std::string& name, float value) {
     if (shader) shader->setFloat(name, value);
 }
 
 void Shader::setInt(const std::string& name, int value) {
     if (shader) shader->setInt(name, value);
+}
+
+void Shader::setVec3(const std::string& name, const glm::vec3& vector) {
+    if (shader) shader->setVec3(name, vector);
 }
 
 }

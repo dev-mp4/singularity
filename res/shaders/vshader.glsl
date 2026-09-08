@@ -9,9 +9,11 @@ uniform mat4 vProjView;
 
 out vec2 fUV;
 out vec3 fNormal;
+out vec3 fFragPos;
 
 void main() {
     fUV = vUV;
-    fNormal = vNormal;
+    fNormal = normalize(mat3(transpose(inverse(vModel))) * vNormal);
+    fFragPos = vec3(vModel * vec4(vPos, 1.0f));
     gl_Position = vProjView * vModel * vec4(vPos, 1.0);
 }

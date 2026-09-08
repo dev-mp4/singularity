@@ -30,8 +30,10 @@ void MeshRenderer::onRender() {
         Log::warn() << "No cameras found!";
 
     for (auto cam : cams) {
-        material->setMat4("vModel", transform->getMatrix());
-        material->setMat4("vProjView", cam->getProjView());
+        // direct shader assignment is faster and more clean than setting material parameter
+        material->shader->setMat4("vModel", transform->getModelMatrix());
+        material->shader->setMat4("vProjView", cam->getProjView());
+        material->shader->setVec3("fViewPos", cam->getPos());
         material->use();
         mesh->draw();
     }
