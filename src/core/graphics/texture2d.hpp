@@ -17,6 +17,10 @@ public:
 
     void destroy();
 
+    bool mipmaps = true;
+    WrapMode wrapMode = WrapMode::ClampToEdge;
+    FilteringMode filter = FilteringMode::Bilinear;
+
 private:
     ITexture2D* texture;
 };
